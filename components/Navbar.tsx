@@ -69,6 +69,12 @@ const Navbar = () => {
             >
               Blog
             </button>
+            <button
+              onClick={() => scrollTo('travel')}
+              className="text-base font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors uppercase tracking-wider"
+            >
+              Travel
+            </button>
             <a
               href="/resume.pdf"
               target="_blank"

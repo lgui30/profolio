@@ -5,6 +5,7 @@ import Hero from '@/components/Hero'
 import Experience from '@/components/Experience'
 import ProjectList from '@/components/ProjectList'
 import Blog from '@/components/Blog'
+import Travel from '@/components/Travel'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
       <Experience />
       <ProjectList />
       <Blog />
+      <Travel />
       <Footer />
     </main>
   )
