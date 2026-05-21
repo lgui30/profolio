@@ -1,5 +1,15 @@
 const travelEntries = [
   {
+    title: 'Houston — Long Weekend №01',
+    destination: 'Houston, TX',
+    dates: 'May 23–25, 2026',
+    duration: '3 days',
+    description:
+      'A food-first urban weekend for Wendy & Lang — Haidilao hot pot in Katy, Chinese skewers on Bellaire, the MFAH Berggruen opening, and Opera Gallery\'s Monet. Toll-free I-10 routing, interactive map, and hour-by-hour schedule included.',
+    tags: ['Texas', 'Food', 'Art'],
+    href: '/travel/houston-2026.html',
+  },
+  {
     title: 'Yellowstone — Field Guide №07',
     destination: 'Island Park, WY / MT / ID',
     dates: 'Jun 3–7, 2026',
