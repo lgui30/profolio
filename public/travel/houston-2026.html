@@ -6,1191 +6,1280 @@
 <title>Houston Long Weekend · Wendy &amp; Lang · May 23–25, 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
-  :root {
-    --ivory:        #F5F0E8;
-    --ivory-deep:   #EDE5D8;
-    --paper:        #FAF7F2;
-    --terra:        #C0614A;
-    --terra-muted:  #D4806A;
-    --terra-pale:   #F0DDD8;
-    --rose:         #C4856A;
-    --ink:          #1E1A18;
-    --ink-soft:     #3C3530;
-    --stone:        #7A6E66;
-    --stone-light:  #A89E96;
-    --rule:         rgba(122, 110, 102, 0.2);
-    --rule-strong:  rgba(192, 97, 74, 0.3);
-    --shadow:       rgba(30, 26, 24, 0.08);
-  }
+:root {
+  --ivory:       #F5F0E8;
+  --ivory-deep:  #EDE5D8;
+  --paper:       #FAF7F2;
+  --terra:       #C0614A;
+  --terra-mid:   #D4806A;
+  --terra-pale:  #F0DDD8;
+  --d1:          #C0614A;  /* Day 1 — terracotta */
+  --d2:          #3D7A8A;  /* Day 2 — teal */
+  --d3:          #8A6E5A;  /* Day 3 — warm umber */
+  --ink:         #1E1A18;
+  --ink-soft:    #3C3530;
+  --stone:       #7A6E66;
+  --stone-light: #A89E96;
+  --rule:        rgba(122,110,102,0.18);
+  --rule-terra:  rgba(192,97,74,0.25);
+  --paper-bg:    #FAF7F2;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  body {
-    font-family: "DM Sans", system-ui, sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 16px;
-    line-height: 1.65;
-    overflow-x: hidden;
-  }
+body {
+  font-family: "DM Sans", system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
 
-  /* grain overlay */
-  body::before {
-    content: "";
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 999;
-    opacity: 0.25;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.09  0 0 0 0 0.07  0 0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
+/* grain overlay */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.09  0 0 0 0 0.07  0 0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
 
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .fade-up { animation: fadeUp 0.7s ease forwards; }
-  .fade-up-1 { animation-delay: 0.1s; opacity: 0; }
-  .fade-up-2 { animation-delay: 0.25s; opacity: 0; }
-  .fade-up-3 { animation-delay: 0.4s; opacity: 0; }
-  .fade-up-4 { animation-delay: 0.55s; opacity: 0; }
-  .fade-up-5 { animation-delay: 0.7s; opacity: 0; }
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fu { animation: fadeUp 0.65s ease forwards; }
+.fu-1 { animation-delay:0.08s; opacity:0; }
+.fu-2 { animation-delay:0.2s;  opacity:0; }
+.fu-3 { animation-delay:0.35s; opacity:0; }
+.fu-4 { animation-delay:0.5s;  opacity:0; }
 
-  /* ─── HERO ─── */
-  .hero {
-    position: relative;
-    min-height: 88vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    overflow: hidden;
-    background: #1A1410;
-  }
-  .hero-img {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center 40%;
-    opacity: 0.62;
-    transition: opacity 0.4s;
-  }
-  .hero-gradient {
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(26, 20, 16, 0) 0%,
-      rgba(26, 20, 16, 0.2) 45%,
-      rgba(26, 20, 16, 0.82) 100%
-    );
-  }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 3rem 2.5rem 3.5rem;
-    max-width: 900px;
-  }
-  .hero-eyebrow {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--terra-muted);
-    margin-bottom: 1rem;
-    opacity: 0.9;
-  }
-  .hero-title {
-    font-family: "Playfair Display", Georgia, serif;
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    font-weight: 500;
-    color: #FAF7F2;
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    margin-bottom: 1.5rem;
-  }
-  .hero-title em {
-    font-style: italic;
-    color: var(--terra-muted);
-  }
-  .hero-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: center;
-  }
-  .hero-meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-  .hero-meta-label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--stone-light);
-  }
-  .hero-meta-value {
-    font-size: 0.95rem;
-    color: #FAF7F2;
-    font-weight: 300;
-  }
-  .hero-divider {
-    width: 1px;
-    height: 32px;
-    background: rgba(250, 247, 242, 0.2);
-    align-self: center;
-  }
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: #100E0C;
+}
+.hero-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  opacity: 0.68;
+}
+.hero-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(16,14,12,0) 0%,
+    rgba(16,14,12,0.15) 40%,
+    rgba(16,14,12,0.82) 100%
+  );
+}
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 3rem 2.5rem 4rem;
+  max-width: 920px;
+}
+.hero-eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--terra-mid);
+  margin-bottom: 1rem;
+}
+.hero-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.8rem, 6.5vw, 5.2rem);
+  font-weight: 500;
+  color: #FAF7F2;
+  line-height: 1.03;
+  letter-spacing: -0.01em;
+  margin-bottom: 2rem;
+}
+.hero-title em { font-style: italic; color: var(--terra-mid); }
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+.hero-pill {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(250,247,242,0.25);
+  border-radius: 100px;
+  color: rgba(250,247,242,0.75);
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(250,247,242,0.15);
+}
+.hm { display: flex; flex-direction: column; gap: 0.12rem; }
+.hm-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(250,247,242,0.45);
+}
+.hm-val { font-size: 0.92rem; color: #FAF7F2; font-weight: 300; }
 
-  /* ─── LAYOUT ─── */
-  .container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-  section { padding: 4.5rem 0; }
+/* ── LAYOUT ── */
+.container { max-width: 860px; margin: 0 auto; padding: 0 1.75rem; }
+section { padding: 4rem 0; }
+.sec-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.sec-label::after { content:""; flex:1; height:1px; background:var(--rule-terra); }
+.sec-title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.12;
+  margin-bottom: 0.4rem;
+}
+.sec-sub {
+  color: var(--stone);
+  font-size: 0.9rem;
+  font-weight: 300;
+  max-width: 560px;
+  margin-bottom: 2.5rem;
+}
+hr.thin { border:none; border-top: 1px solid var(--rule); }
 
-  /* ─── SECTION HEADERS ─── */
-  .section-label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--terra);
-    margin-bottom: 0.6rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .section-label::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--rule-strong);
-  }
-  .section-title {
-    font-family: "Playfair Display", Georgia, serif;
-    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1.15;
-    margin-bottom: 0.5rem;
-  }
-  .section-sub {
-    color: var(--stone);
-    font-weight: 300;
-    font-size: 0.95rem;
-    max-width: 560px;
-    margin-bottom: 2.5rem;
-  }
+/* ── TRAVEL MANIFEST ── */
+.manifest-box {
+  background: var(--ivory);
+  border-radius: 6px;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.mc { text-align: center; }
+.mc-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stone-light);
+  margin-bottom: 0.3rem;
+}
+.mc-city {
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+.mc-sub { font-size: 0.8rem; color: var(--stone); margin-top: 0.15rem; }
+.mc-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.mc-arrow-line {
+  width: 80px; height: 1px;
+  background: var(--rule-terra);
+  position: relative;
+}
+.mc-arrow-line::after {
+  content: "›";
+  position: absolute;
+  right: -6px;
+  top: -10px;
+  color: var(--terra-mid);
+  font-size: 1.1rem;
+}
+.mc-detail {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  color: var(--stone);
+  text-align: center;
+  line-height: 1.5;
+}
+.manifest-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.mg-item {
+  padding: 1.1rem 1.25rem;
+  border-right: 1px solid var(--rule);
+}
+.mg-item:last-child { border-right: none; }
+.mg-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone-light);
+  margin-bottom: 0.3rem;
+}
+.mg-val { font-size: 0.9rem; color: var(--ink); }
+.mg-note { font-size: 0.75rem; color: var(--stone); margin-top: 0.15rem; line-height: 1.4; }
 
-  /* ─── RULE ─── */
-  hr.thin {
-    border: none;
-    border-top: 1px solid var(--rule);
-    margin: 0;
-  }
+/* ── MAP ── */
+#trip-map {
+  height: 480px;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.map-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.map-tab {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--stone);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.map-tab:hover { border-color: var(--terra-mid); color: var(--terra); }
+.map-tab.active { background: var(--terra); border-color: var(--terra); color: #fff; }
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--stone);
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.toll-note {
+  margin-top: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  color: var(--stone);
+  background: var(--ivory);
+  border-left: 3px solid #6a9e62;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 4px 4px 0;
+}
 
-  /* ─── TRAVEL MANIFEST ─── */
-  .manifest-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 3rem;
-    padding: 2rem 0;
-    border-top: 1px dotted var(--rule);
-    border-bottom: 1px dotted var(--rule);
-  }
-  .manifest-item {}
-  .manifest-item-label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--stone);
-    margin-bottom: 0.3rem;
-  }
-  .manifest-item-value {
-    font-size: 1rem;
-    color: var(--ink);
-    font-weight: 400;
-  }
-  .manifest-item-note {
-    font-size: 0.82rem;
-    color: var(--stone);
-    font-weight: 300;
-    margin-top: 0.1rem;
-  }
-  .manifest-route {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.25rem 0;
-    border-top: 1px dotted var(--rule);
-  }
-  .route-city {
-    font-family: "Playfair Display", serif;
-    font-size: 1.1rem;
-    font-weight: 500;
-  }
-  .route-arrow {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--stone-light);
-  }
-  .route-arrow::before,
-  .route-arrow::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--rule);
-  }
-  .route-arrow-icon {
-    font-size: 0.8rem;
-    color: var(--terra-muted);
-  }
-  .route-detail {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.65rem;
-    color: var(--stone);
-    text-align: center;
-    line-height: 1.4;
-  }
+/* ── DAY HERO HEADER ── */
+.day-hero {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 2.5rem 2rem 2.5rem 2rem;
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: flex-end;
+}
+.day-hero::before {
+  content: attr(data-num);
+  position: absolute;
+  right: -0.05em;
+  bottom: -0.2em;
+  font-family: "Playfair Display", serif;
+  font-size: 13rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.07;
+  color: var(--ink);
+}
+.dh-1 { background: linear-gradient(135deg, #F0DDD8 0%, #F7F2EE 100%); border-left: 5px solid var(--d1); }
+.dh-2 { background: linear-gradient(135deg, #D3E8EF 0%, #EEF5F7 100%); border-left: 5px solid var(--d2); }
+.dh-3 { background: linear-gradient(135deg, #E5DCD8 0%, #F4F0EE 100%); border-left: 5px solid var(--d3); }
+.dh-inner { flex: 1; }
+.dh-eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 0.4rem;
+}
+.dh-1 .dh-eyebrow { color: var(--d1); }
+.dh-2 .dh-eyebrow { color: var(--d2); }
+.dh-3 .dh-eyebrow { color: var(--d3); }
+.dh-title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.dh-route {
+  font-size: 0.82rem;
+  color: var(--stone);
+  font-style: italic;
+}
+.dh-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+.dh-chip {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.05em;
+  padding: 0.22rem 0.6rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 100px;
+  color: var(--ink-soft);
+}
 
-  /* ─── DAY CARD ─── */
-  .day-section { padding: 3rem 0; }
-  .day-header {
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-    height: 260px;
-  }
-  .day-header-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-  .day-header-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(26, 20, 16, 0.55) 0%,
-      rgba(26, 20, 16, 0.2) 60%,
-      rgba(26, 20, 16, 0) 100%
-    );
-  }
-  .day-header-text {
-    position: absolute;
-    bottom: 0; left: 0;
-    padding: 1.5rem 1.75rem;
-  }
-  .day-number {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--terra-muted);
-    margin-bottom: 0.3rem;
-  }
-  .day-title {
-    font-family: "Playfair Display", Georgia, serif;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 500;
-    color: #FAF7F2;
-    line-height: 1.1;
-  }
-  .day-date {
-    font-size: 0.82rem;
-    color: rgba(250, 247, 242, 0.7);
-    margin-top: 0.2rem;
-    font-weight: 300;
-  }
+/* ── RAILROAD TRACK TIMELINE ── */
+.rr-wrap {
+  padding-left: 80px;
+  position: relative;
+}
+.rr-track {
+  border-left: 2px solid var(--rule);
+  padding-left: 0;
+  margin-left: 0;
+}
+.rr-item {
+  position: relative;
+  padding: 0 0 2.75rem 2rem;
+}
+.rr-item:last-child { padding-bottom: 0; }
 
-  /* ─── CHIPS ─── */
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-  }
-  .chip {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.06em;
-    padding: 0.3rem 0.7rem;
-    border: 1px solid var(--rule-strong);
-    border-radius: 100px;
-    color: var(--terra);
-    background: transparent;
-    white-space: nowrap;
-  }
+/* dot */
+.rr-item::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 5px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: 3px solid var(--paper-bg);
+  box-shadow: 0 0 0 1.5px var(--stone-light);
+  background: var(--ivory-deep);
+  z-index: 1;
+}
+.rr-item.food::before   { background: var(--terra); box-shadow: 0 0 0 1.5px var(--terra); }
+.rr-item.culture::before { background: #3D7A8A; box-shadow: 0 0 0 1.5px #3D7A8A; }
+.rr-item.hotel::before  { background: #8A6E5A; box-shadow: 0 0 0 1.5px #8A6E5A; }
+.rr-item.shopping::before { background: #9E8A3A; box-shadow: 0 0 0 1.5px #9E8A3A; }
+.rr-item.night::before  { background: var(--ink-soft); box-shadow: 0 0 0 1.5px var(--ink-soft); }
+.rr-item.drive::before  { background: #6a9e62; box-shadow: 0 0 0 1.5px #6a9e62; }
 
-  /* ─── TIMELINE ─── */
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .timeline-item {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 0 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px dotted var(--rule);
-    align-items: start;
-  }
-  .timeline-item:last-child { border-bottom: none; }
-  .timeline-time {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: var(--terra);
-    padding-top: 0.15rem;
-    letter-spacing: 0.03em;
-  }
-  .timeline-body {}
-  .timeline-name {
-    font-family: "Playfair Display", serif;
-    font-weight: 500;
-    font-size: 1.02rem;
-    color: var(--ink);
-    margin-bottom: 0.25rem;
-  }
-  .timeline-desc {
-    font-size: 0.88rem;
-    color: var(--ink-soft);
-    line-height: 1.55;
-    margin-bottom: 0.3rem;
-  }
-  .timeline-note {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.04em;
-    color: var(--stone);
-    background: var(--ivory-deep);
-    padding: 0.2rem 0.5rem;
-    border-radius: 3px;
-    display: inline-block;
-    margin-top: 0.1rem;
-  }
+/* time, positioned left of the track */
+.rr-time {
+  position: absolute;
+  left: -88px;
+  top: 2px;
+  width: 74px;
+  text-align: right;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--stone);
+  line-height: 1;
+}
+.rr-item.food .rr-time   { color: var(--terra); }
+.rr-item.culture .rr-time { color: #3D7A8A; }
+.rr-item.hotel .rr-time  { color: #8A6E5A; }
+.rr-item.shopping .rr-time { color: #9E8A3A; }
+.rr-item.drive .rr-time  { color: #6a9e62; }
 
-  /* ─── FOOD HIT LIST ─── */
-  .food-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-  }
-  .food-card {
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    overflow: hidden;
-    background: var(--ivory);
-    transition: border-color 0.2s;
-  }
-  .food-card:hover { border-color: var(--terra-muted); }
-  .food-card-img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    display: block;
-    background: var(--ivory-deep);
-  }
-  .food-card-body {
-    padding: 1rem 1.1rem 1.1rem;
-  }
-  .food-card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 0.35rem;
-    gap: 0.5rem;
-  }
-  .food-card-name {
-    font-family: "Playfair Display", serif;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .food-card-name:hover { color: var(--terra); }
-  .food-card-price {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.65rem;
-    color: var(--terra-muted);
-    white-space: nowrap;
-    padding-top: 0.1rem;
-  }
-  .food-card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-bottom: 0.5rem;
-  }
-  .food-tag {
-    font-size: 0.68rem;
-    color: var(--stone);
-    background: var(--ivory-deep);
-    padding: 0.15rem 0.45rem;
-    border-radius: 3px;
-  }
-  .food-card-pitch {
-    font-size: 0.83rem;
-    color: var(--ink-soft);
-    line-height: 1.5;
-  }
-  .food-card-maps {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    margin-top: 0.6rem;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.06em;
-    color: var(--terra);
-    text-decoration: none;
-    border-bottom: 1px solid var(--terra-pale);
-    padding-bottom: 0.05rem;
-    transition: border-color 0.15s;
-  }
-  .food-card-maps:hover { border-color: var(--terra); }
+.rr-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stone-light);
+  margin-bottom: 0.2rem;
+}
+.rr-name {
+  font-family: "Playfair Display", serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+.rr-desc {
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  line-height: 1.62;
+  margin-bottom: 0.4rem;
+  max-width: 580px;
+}
+.rr-note {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.03em;
+  color: var(--stone);
+  background: var(--ivory-deep);
+  padding: 0.22rem 0.55rem;
+  border-radius: 3px;
+  display: inline-block;
+}
+.rr-maps {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.05em;
+  color: var(--terra);
+  text-decoration: none;
+  border-bottom: 1px solid var(--terra-pale);
+  padding-bottom: 0.05rem;
+}
 
-  /* ─── NEIGHBORHOODS ─── */
-  .hoods-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem 3rem;
-  }
-  .hood {
-    padding-top: 1.25rem;
-    border-top: 2px solid var(--terra-pale);
-  }
-  .hood-name {
-    font-family: "Playfair Display", serif;
-    font-size: 1.15rem;
-    font-weight: 500;
-    color: var(--ink);
-    margin-bottom: 0.15rem;
-  }
-  .hood-tag {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--terra-muted);
-    margin-bottom: 0.6rem;
-  }
-  .hood-desc {
-    font-size: 0.87rem;
-    color: var(--ink-soft);
-    line-height: 1.6;
-  }
+/* ── FOOD GRID ── */
+.food-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.fc {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--ivory);
+  transition: border-color 0.2s;
+}
+.fc:hover { border-color: var(--terra-mid); }
+.fc-img {
+  width: 100%; height: 155px;
+  object-fit: cover; display: block;
+  background: var(--ivory-deep);
+}
+.fc-body { padding: 1rem 1.1rem 1.2rem; }
+.fc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.3rem; }
+.fc-name {
+  font-family: "Playfair Display", serif;
+  font-size: 1rem; font-weight: 500;
+  color: var(--ink); text-decoration: none;
+}
+.fc-name:hover { color: var(--terra); }
+.fc-price {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem; color: var(--terra-mid);
+  white-space: nowrap; padding-top: 0.1rem;
+}
+.fc-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.5rem; }
+.fc-tag {
+  font-size: 0.67rem; color: var(--stone);
+  background: var(--ivory-deep);
+  padding: 0.12rem 0.4rem; border-radius: 3px;
+}
+.fc-pitch { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.5; }
+.fc-maps {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  margin-top: 0.55rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.57rem; letter-spacing: 0.05em;
+  color: var(--terra); text-decoration: none;
+  border-bottom: 1px solid var(--terra-pale); padding-bottom: 0.05rem;
+}
 
-  /* ─── PRACTICAL ─── */
-  .practical-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-  .practical-item {
-    padding: 1.25rem 1.35rem;
-    background: var(--ivory);
-    border-radius: 4px;
-    border-left: 3px solid var(--terra-pale);
-  }
-  .practical-title {
-    font-family: "Playfair Display", serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--ink);
-    margin-bottom: 0.4rem;
-  }
-  .practical-body {
-    font-size: 0.83rem;
-    color: var(--stone);
-    line-height: 1.6;
-  }
+/* ── NEIGHBORHOODS ── */
+.hoods { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 3rem; }
+.hood { padding-top: 1.25rem; border-top: 2px solid var(--terra-pale); }
+.hood-name { font-family: "Playfair Display", serif; font-size: 1.1rem; font-weight: 500; margin-bottom: 0.15rem; }
+.hood-tag { font-family: "JetBrains Mono", monospace; font-size: 0.57rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terra-mid); margin-bottom: 0.55rem; }
+.hood-desc { font-size: 0.86rem; color: var(--ink-soft); line-height: 1.65; }
 
-  /* ─── FOOTER ─── */
-  footer {
-    padding: 3rem 0 4rem;
-    text-align: center;
-    border-top: 1px solid var(--rule);
-  }
-  .footer-text {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--stone-light);
-  }
+/* ── PRACTICAL ── */
+.practical { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.prac {
+  padding: 1.2rem 1.3rem;
+  background: var(--ivory);
+  border-radius: 6px;
+  border-left: 3px solid var(--terra-pale);
+}
+.prac-title { font-family: "Playfair Display", serif; font-size: 0.95rem; font-weight: 500; margin-bottom: 0.35rem; }
+.prac-body { font-size: 0.82rem; color: var(--stone); line-height: 1.62; }
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 640px) {
-    .hero-content { padding: 2rem 1.25rem 2.5rem; }
-    .manifest-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .manifest-route { flex-direction: column; align-items: flex-start; }
-    .food-grid { grid-template-columns: 1fr; }
-    .hoods-grid { grid-template-columns: 1fr; }
-    .practical-grid { grid-template-columns: 1fr; }
-    .timeline-item { grid-template-columns: 70px 1fr; }
-    .day-header { height: 200px; }
-    section { padding: 3rem 0; }
-    .hero-divider { display: none; }
-  }
+/* ── FOOTER ── */
+footer { padding: 2.5rem 0 3.5rem; text-align: center; border-top: 1px solid var(--rule); }
+.footer-text { font-family: "JetBrains Mono", monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-light); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .hero-content { padding: 2rem 1.25rem 2.5rem; }
+  .manifest-box { grid-template-columns: 1fr; text-align: left; }
+  .manifest-grid { grid-template-columns: 1fr 1fr; }
+  .food-grid, .hoods, .practical { grid-template-columns: 1fr; }
+  .rr-wrap { padding-left: 64px; }
+  .rr-time { left: -72px; width: 60px; font-size: 0.6rem; }
+  .map-tabs { flex-wrap: wrap; }
+  .day-hero { padding: 2rem 1.25rem; }
+  .day-hero::before { font-size: 8rem; }
+  section { padding: 3rem 0; }
+  .mg-item { padding: 0.9rem 1rem; }
+  .manifest-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Leaflet popup styling */
+.leaflet-popup-content-wrapper {
+  border-radius: 6px !important;
+  font-family: "DM Sans", sans-serif !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+}
+.leaflet-popup-content { margin: 12px 16px !important; }
+.popup-day { font-family: "JetBrains Mono", monospace; font-size: 0.56rem; letter-spacing: 0.1em; text-transform: uppercase; color: #999; margin-bottom: 2px; }
+.popup-name { font-family: "Playfair Display", serif; font-size: 1rem; font-weight: 500; color: #1E1A18; margin-bottom: 4px; }
+.popup-note { font-size: 0.78rem; color: #7A6E66; line-height: 1.4; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     HERO
-════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════
+     HERO — Houston skyline (verified Unsplash ID)
+══════════════════════════════════════════════ -->
 <section class="hero">
   <img class="hero-img"
-    src="https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1600&q=80&fit=crop"
-    onerror="this.src='https://picsum.photos/seed/houston-skyline/1600/900'"
-    alt="Houston skyline at night">
-  <div class="hero-gradient"></div>
+    src="https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=1800&q=85&fit=crop&crop=center"
+    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1800&q=85&fit=crop';"
+    alt="Houston Texas skyline at dusk">
+  <div class="hero-grad"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow fade-up fade-up-1">A Long Weekend in</div>
-    <h1 class="hero-title fade-up fade-up-2">
-      Houston,<br><em>Texas</em>
-    </h1>
-    <div class="hero-meta fade-up fade-up-3">
-      <div class="hero-meta-item">
-        <span class="hero-meta-label">Travelers</span>
-        <span class="hero-meta-value">Wendy &amp; Lang</span>
+    <div class="hero-eyebrow fu fu-1">A Long Weekend in</div>
+    <h1 class="hero-title fu fu-2">Houston,<br><em>Texas</em></h1>
+    <div class="hero-pills fu fu-3">
+      <span class="hero-pill">Food-first</span>
+      <span class="hero-pill">Urban</span>
+      <span class="hero-pill">Hot pot · Skewers · Museums</span>
+      <span class="hero-pill">May 23–25, 2026</span>
+    </div>
+    <div class="hero-meta fu fu-4">
+      <div class="hm">
+        <span class="hm-label">Travelers</span>
+        <span class="hm-val">Wendy &amp; Lang</span>
       </div>
-      <div class="hero-divider"></div>
-      <div class="hero-meta-item">
-        <span class="hero-meta-label">Dates</span>
-        <span class="hero-meta-value">May 23 – 25, 2026</span>
+      <div class="hm">
+        <span class="hm-label">Hotel</span>
+        <span class="hm-val">AC Hotel Houston Downtown</span>
       </div>
-      <div class="hero-divider"></div>
-      <div class="hero-meta-item">
-        <span class="hero-meta-label">Hotel</span>
-        <span class="hero-meta-value">AC Hotel Houston Downtown</span>
+      <div class="hm">
+        <span class="hm-label">Drive</span>
+        <span class="hm-val">Austin → Houston · I-10 E</span>
       </div>
-      <div class="hero-divider"></div>
-      <div class="hero-meta-item">
-        <span class="hero-meta-label">Vibe</span>
-        <span class="hero-meta-value">Food-first. Urban. Unhurried.</span>
+      <div class="hm">
+        <span class="hm-label">Return</span>
+        <span class="hm-val">Monday by 6 PM Austin</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      TRAVEL MANIFEST
-════════════════════════════════════════ -->
+══════════════════════════════════════════════ -->
 <section>
-  <div class="container">
-    <div class="section-label fade-up fade-up-1">Travel Manifest</div>
-    <h2 class="section-title fade-up fade-up-2">Getting There &amp; Back</h2>
-    <p class="section-sub fade-up fade-up-3">Austin to Houston is 165 miles on I-10 E — a straight shot, no drama.</p>
+<div class="container">
+  <div class="sec-label">Travel Manifest</div>
+  <h2 class="sec-title">Getting There &amp; Back</h2>
+  <p class="sec-sub">165 miles on I-10 E. No tolls. No drama. The Katy stop is on the way in — you hit it before Houston, not after.</p>
 
-    <div class="manifest-route">
-      <div>
-        <div class="route-detail">Austin, TX</div>
-        <div class="route-city">Austin</div>
-      </div>
-      <div class="route-arrow">
-        <span class="route-detail">I-10 E · ~2.5 hrs · 165 mi</span>
-        <span class="route-arrow-icon">→</span>
-      </div>
-      <div>
-        <div class="route-detail">Houston, TX</div>
-        <div class="route-city">Houston</div>
-      </div>
+  <div class="manifest-box">
+    <div class="mc">
+      <div class="mc-label">Start</div>
+      <div class="mc-city">Austin</div>
+      <div class="mc-sub">9:00 – 9:30 AM Saturday</div>
     </div>
-
-    <div class="manifest-grid" style="margin-top:1.5rem;">
-      <div class="manifest-item">
-        <div class="manifest-item-label">Saturday Departure</div>
-        <div class="manifest-item-value">9:00 – 10:00 AM</div>
-        <div class="manifest-item-note">Depart Austin. Arrive Houston by noon — enough time to settle in before the afternoon moves.</div>
-      </div>
-      <div class="manifest-item">
-        <div class="manifest-item-label">Estimated Arrival</div>
-        <div class="manifest-item-value">11:30 AM – 12:30 PM</div>
-        <div class="manifest-item-note">AC Hotel check-in is 3 PM — drop bags, freshen up, head out.</div>
-      </div>
-      <div class="manifest-item">
-        <div class="manifest-item-label">Monday Departure</div>
-        <div class="manifest-item-value">2:30 – 3:00 PM</div>
-        <div class="manifest-item-note">Leave Houston by 3 PM to land in Austin before 6 PM comfortably.</div>
-      </div>
-      <div class="manifest-item">
-        <div class="manifest-item-label">Austin Arrival</div>
-        <div class="manifest-item-value">5:30 PM (target)</div>
-        <div class="manifest-item-note">I-10 W can slow near Katy/Beltway 8 on Mondays — add buffer.</div>
-      </div>
+    <div class="mc-arrow">
+      <div class="mc-arrow-line"></div>
+      <div class="mc-detail">I-10 E · 165 mi<br>Toll-free ✓<br>~2.5 hrs</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">End</div>
+      <div class="mc-city">Houston</div>
+      <div class="mc-sub">~11:30 AM arrival (Katy first)</div>
     </div>
   </div>
+
+  <div class="manifest-grid">
+    <div class="mg-item">
+      <div class="mg-label">Saturday Wheels Down</div>
+      <div class="mg-val">~11:30 AM</div>
+      <div class="mg-note">First stop: Haidilao in Katy — on I-10 before you even reach the 610 loop.</div>
+    </div>
+    <div class="mg-item">
+      <div class="mg-label">Hotel Check-In</div>
+      <div class="mg-val">~2:30 PM</div>
+      <div class="mg-note">After hot pot. Official check-in is 3 PM — request early or drop bags and head out.</div>
+    </div>
+    <div class="mg-item">
+      <div class="mg-label">Monday Departure</div>
+      <div class="mg-val">2:30 – 3:00 PM</div>
+      <div class="mg-note">Leave Houston by 3 to land Austin before 6 PM comfortably.</div>
+    </div>
+    <div class="mg-item">
+      <div class="mg-label">Toll-Free Route</div>
+      <div class="mg-val">I-10 the whole way</div>
+      <div class="mg-note">Skip TX-130, TX-45, Grand Pkwy. Stay on I-10 both directions.</div>
+    </div>
+  </div>
+</div>
 </section>
 
 <hr class="thin">
 
-<!-- ═══════════════════════════════════════
-     DAY 1 · SATURDAY MAY 23
-════════════════════════════════════════ -->
-<section class="day-section">
-  <div class="container">
+<!-- ══════════════════════════════════════════════
+     MAP — Interactive sequence with Leaflet
+══════════════════════════════════════════════ -->
+<section>
+<div class="container">
+  <div class="sec-label">Route Map</div>
+  <h2 class="sec-title">The Sequence</h2>
+  <p class="sec-sub">Every stop in order across the three days. Markers are numbered. Tap any pin for details.</p>
 
-    <div class="day-header fade-up fade-up-1">
-      <img class="day-header-img"
-        src="https://images.unsplash.com/photo-1601928813599-19c6a1a0c07b?w=1200&q=80&fit=crop"
-        onerror="this.src='https://picsum.photos/seed/houston-shopping/1200/400'"
-        alt="Upscale urban shopping district">
-      <div class="day-header-overlay"></div>
-      <div class="day-header-text">
-        <div class="day-number">Day 01 · Saturday, May 23</div>
-        <h2 class="day-title">Arrive, Browse, Then Burn Your Tongue</h2>
-        <div class="day-date">Galleria → River Oaks → Katy → Montrose</div>
-      </div>
-    </div>
-
-    <div class="chips fade-up fade-up-2">
-      <span class="chip">Uniqlo / Galleria</span>
-      <span class="chip">Opera Gallery</span>
-      <span class="chip">Monet + Picasso</span>
-      <span class="chip">Haidilao Katy</span>
-      <span class="chip">Noodle-pulling show</span>
-      <span class="chip">Montrose after dark</span>
-    </div>
-
-    <div class="timeline fade-up fade-up-3">
-
-      <div class="timeline-item">
-        <div class="timeline-time">09:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Depart Austin</div>
-          <div class="timeline-desc">Grab coffee before you hit I-35 S to I-10 E. The drive is easy and flat — Texas ugly in the best way. Arrive Houston around noon.</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">12:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Check In — AC Hotel Houston Downtown</div>
-          <div class="timeline-desc">723 Main St, right in the core of downtown. The building is a restored 1914 structure — high ceilings, good light. Drop bags, change, and get out.</div>
-          <div class="timeline-note">Official check-in is 3 PM · request early bag drop at front desk</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">12:30</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Lunch — Find your footing</div>
-          <div class="timeline-desc">Eat something light near downtown or the Midtown/Montrose edge. Save serious appetite for tonight. The sushi at Kata Robata or a quick bite at Provisions both work.</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">14:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Uniqlo at The Galleria</div>
-          <div class="timeline-desc">5085 Westheimer Rd. One of Texas's few Uniqlo locations. Hit the AIRism, linens, and anything on sale. The Galleria is massive — don't get sucked in for two hours.</div>
-          <div class="timeline-note">Parking: Galleria garages are free · plan 45–60 min</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">15:30</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Opera Gallery Houston — Monet &amp; Masters</div>
-          <div class="timeline-desc">4444 Westheimer Rd, River Oaks District, two blocks from the Galleria. This gallery opened in March 2026 as Opera Gallery's first Texas location — and it launched with Monet's <em>Les Bords de l'Epte à Giverny</em> (1887), plus Picasso, Kusama, Chagall, and Kehinde Wiley. The collection rotates continuously from their global network of 15 galleries. Free and open to the public — no ticket needed, no hustle.</div>
-          <div class="timeline-note">Free admission · River Oaks District is walkable, nice outdoor strip</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">17:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Drive to Katy — Haidilao Hot Pot</div>
-          <div class="timeline-desc">23220 Grand Cir Blvd, Katy TX — about 35 minutes west on I-10. Worth the drive. Haidilao is the AYCE premium hot pot institution: tableside service that borders on theatrical, the noodle-pulling performance you've seen on every food reel, and a broth bar that actually slaps. Order the house-made tofu skin and the beef short rib. Budget ~2 hours at the table.</div>
-          <div class="timeline-note">⚠ Reserve in advance on their app or walk-in and wait · waits on weekends can hit 60–90 min</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">21:30</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Back to Houston — Montrose Night</div>
-          <div class="timeline-desc">Drive back downtown or land in Montrose for a nightcap. Axelrad beer garden is good if it's warm. The Menil neighborhood is beautiful at night — a rare walkable block in Houston.</div>
-          <div class="timeline-note">Uber from Katy back if you're sharing a bottle at dinner</div>
-        </div>
-      </div>
-
-    </div>
+  <div class="map-tabs">
+    <button class="map-tab active" data-day="all">All Days</button>
+    <button class="map-tab" data-day="1">Day 01</button>
+    <button class="map-tab" data-day="2">Day 02</button>
+    <button class="map-tab" data-day="3">Day 03</button>
   </div>
+
+  <div id="trip-map"></div>
+
+  <div class="map-legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#C0614A"></span>Day 01 · Sat</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#3D7A8A"></span>Day 02 · Sun</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#8A6E5A"></span>Day 03 · Mon</div>
+  </div>
+  <div class="toll-note">🛣 Toll-free routing: Stay on I-10 E/W between Austin and Houston. Within the loop use surface streets (Westheimer, Kirby, Main, Bellaire Blvd). Avoid Beltway 8, Grand Pkwy (TX-99), and Westpark Tollway.</div>
+</div>
 </section>
 
 <hr class="thin">
 
-<!-- ═══════════════════════════════════════
-     DAY 2 · SUNDAY MAY 24
-════════════════════════════════════════ -->
-<section class="day-section">
-  <div class="container">
+<!-- ══════════════════════════════════════════════
+     DAY 01 — SATURDAY MAY 23
+══════════════════════════════════════════════ -->
+<section>
+<div class="container">
 
-    <div class="day-header fade-up fade-up-1">
-      <img class="day-header-img"
-        src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&q=80&fit=crop"
-        onerror="this.src='https://picsum.photos/seed/art-museum-gallery/1200/400'"
-        alt="Art museum interior with paintings">
-      <div class="day-header-overlay"></div>
-      <div class="day-header-text">
-        <div class="day-number">Day 02 · Sunday, May 24</div>
-        <h2 class="day-title">Museums in the Morning, Skewers at Midnight</h2>
-        <div class="day-date">Museum District → Montrose → Bellaire Chinatown</div>
+  <div class="day-hero dh-1 fu fu-1" data-num="01">
+    <div class="dh-inner">
+      <div class="dh-eyebrow">Day 01 · Saturday, May 23</div>
+      <h2 class="dh-title">Burn Your Tongue<br>Before You Even Check In</h2>
+      <div class="dh-route">Austin → Katy (Haidilao) → Downtown Houston → Galleria → River Oaks → Montrose</div>
+      <div class="dh-chips">
+        <span class="dh-chip">Haidilao first — on I-10 on the way in</span>
+        <span class="dh-chip">Noodle-pulling show</span>
+        <span class="dh-chip">Uniqlo · Galleria</span>
+        <span class="dh-chip">Opera Gallery</span>
+        <span class="dh-chip">Monet + Picasso</span>
       </div>
-    </div>
-
-    <div class="chips fade-up fade-up-2">
-      <span class="chip">MFAH Blockbuster</span>
-      <span class="chip">Picasso · Klee · Matisse</span>
-      <span class="chip">Menil Collection</span>
-      <span class="chip">Gao's Kabob</span>
-      <span class="chip">Lamb skewers</span>
-      <span class="chip">Bellaire late night</span>
-    </div>
-
-    <div class="timeline fade-up fade-up-3">
-
-      <div class="timeline-item">
-        <div class="timeline-time">09:30</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Hotel Breakfast / Coffee</div>
-          <div class="timeline-desc">AC Hotel has a solid lobby bar. Or walk a few blocks to Koffeteria or Boomtown Coffee in downtown for a better cup. No rush — the museum doesn't get crowded until after 11.</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">10:30</div>
-        <div class="timeline-body">
-          <div class="timeline-name">MFAH — Picasso · Klee · Matisse: Masterpieces from Museum Berggruen</div>
-          <div class="timeline-desc">1001 Bissonnet St. This exhibition opened May 20 — you'll be there in its first weekend. It's the U.S. debut of Heinz Berggruen's collection: 95+ paintings, watercolors, drawings, and sculptures covering Picasso and Klee's entire careers, Matisse's cutouts, Giacometti's elongated figures, and drawings by Cézanne and Braque. It runs through September, but opening week is the uncrowded window before word gets out.</div>
-          <div class="timeline-note">Tickets required for this exhibition · buy online ahead · $25–30 pp estimated · museum opens 10 AM Sun</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">13:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Lunch in Montrose</div>
-          <div class="timeline-desc">Montrose is a 10-min drive from the museum district. Indika for elevated Indian, Common Bond for sandwiches and excellent baked goods, or Hugo's if you want Mexican that actually means something. Take your pick based on how much time you spent inside Berggruen.</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">15:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">The Menil Collection (optional, free)</div>
-          <div class="timeline-desc">1533 Sul Ross St, a 5-minute walk from most of Montrose. One of the great free art museums in America — Renzo Piano building, Rothko Chapel next door, Cy Twombly Gallery across the street. If you only have 45 minutes, walk through the main building and spend it with the Surrealism rooms.</div>
-          <div class="timeline-note">Free · closed Tuesdays · opens 11 AM</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">16:30</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Bellaire Boulevard Drift</div>
-          <div class="timeline-desc">Drive south on Westheimer into Bellaire/Chinatown — this is Houston's second Chinatown, 99% Chinese-run, and nothing like the tourist version in other cities. Hit a boba shop, browse a Chinese grocery, watch the neighborhood breathe before dinner.</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">18:30</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Gao's Kabob — Chinese Skewer / Chuanr</div>
-          <div class="timeline-desc">9888 Bellaire Blvd, Suite 118. This is the move for chuanr in Houston. Northeast Chinese-style BBQ skewers — lamb is the headliner, charcoal-grilled with cumin and dried chili, smoky and slightly funky in exactly the right way. Also get the garlic scallops, corn, and green beans. Beer towers available. It doubles as a music bar so it gets loud and fun late.</div>
-          <div class="timeline-note">Open Sundays from noon · it runs until 2 AM · no reservation needed · cash-friendly</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">21:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Stay in Bellaire or head back</div>
-          <div class="timeline-desc">The Bellaire strip stays alive late — boba shops open past midnight, and there are karaoke spots nearby if the mood shifts that direction. Or Uber back to the hotel and decompress.</div>
-          <div class="timeline-note">Uber from Bellaire to downtown runs ~$18–25</div>
-        </div>
-      </div>
-
     </div>
   </div>
+
+  <div class="rr-wrap">
+  <div class="rr-track">
+
+    <div class="rr-item drive">
+      <div class="rr-time">09:00</div>
+      <div class="rr-tag">Drive · Depart</div>
+      <div class="rr-name">Hit I-10 East from Austin</div>
+      <div class="rr-desc">No toll. No alternate route needed. I-10 East the entire way — you'll pass through Katy before you ever hit the 610 loop. Budget 2.5 hours to your first stop, less if traffic cooperates.</div>
+      <div class="rr-note">🛣 Toll-free · Stay I-10 E · avoid TX-130 and TX-45</div>
+    </div>
+
+    <div class="rr-item food">
+      <div class="rr-time">11:30</div>
+      <div class="rr-tag">Food · Lunch Stop</div>
+      <div class="rr-name">Haidilao Hot Pot — Katy</div>
+      <div class="rr-desc">23220 Grand Cir Blvd, Katy TX — right off I-10 before you reach Houston proper. This is the move: stop here for lunch so the drive is the appetizer. Haidilao is AYCE premium hot pot with tableside service that's half performance, half hospitality. The noodle-pulling show — where your server hand-stretches noodles into your pot — is iconic. Order the beef short rib, house tofu skin, and mushroom broth base. Budget two easy hours at the table.</div>
+      <div class="rr-note">⚠ Reserve in advance on their app — walk-in waits hit 60–90 min on weekends · exit I-10 at Mason Rd or Katy Fort Bend Rd (both toll-free) to reach Grand Cir Blvd</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=Haidilao+Hot+Pot+23220+Grand+Cir+Blvd+Katy+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item drive">
+      <div class="rr-time">13:30</div>
+      <div class="rr-tag">Drive · Into Houston</div>
+      <div class="rr-name">Continue East on I-10 into Houston</div>
+      <div class="rr-desc">30 minutes downtown from Katy on I-10 E. The Katy Freeway is wide, fast, and free. You'll see the skyline materialize around the 610 interchange — Houston announces itself.</div>
+      <div class="rr-note">Toll-free · I-10 E the whole way</div>
+    </div>
+
+    <div class="rr-item hotel">
+      <div class="rr-time">14:30</div>
+      <div class="rr-tag">Hotel · Check In</div>
+      <div class="rr-name">AC Hotel Houston Downtown</div>
+      <div class="rr-desc">723 Main St, Downtown Houston. A restored 1914 building — high ceilings, warm light, the kind of lobby that actually makes you want to linger. Official check-in is 3 PM. If it's before that, drop bags, freshen up, and get out.</div>
+      <div class="rr-note">Request early bag drop if arriving before 3 PM</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=AC+Hotel+Houston+Downtown+723+Main+St+Houston+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item shopping">
+      <div class="rr-time">15:30</div>
+      <div class="rr-tag">Shopping</div>
+      <div class="rr-name">Uniqlo — The Galleria</div>
+      <div class="rr-desc">5085 Westheimer Rd. One of Houston's only Uniqlo locations. Hit AIRism basics, the linen section, and anything on the sale wall. The Galleria is enormous — set a 45-minute timer or you will disappear.</div>
+      <div class="rr-note">Parking: Galleria garages are free · take Westheimer west from downtown (toll-free surface street)</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=Uniqlo+5085+Westheimer+Rd+Houston+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item culture">
+      <div class="rr-time">17:00</div>
+      <div class="rr-tag">Art · Free Admission</div>
+      <div class="rr-name">Opera Gallery Houston — Monet, Picasso, Kusama</div>
+      <div class="rr-desc">4444 Westheimer Rd, River Oaks District — two blocks east of the Galleria. Opera Gallery opened its first Texas location here in March 2026 with original works including Monet's <em>Les Bords de l'Epte à Giverny</em> (1887), Picasso, Chagall, Kehinde Wiley, Yayoi Kusama, and Keith Haring. Free. No ticket. No hustle. The collection rotates continuously from their global network of 15 galleries — whatever's on the walls when you arrive will be significant.</div>
+      <div class="rr-note">Free admission · River Oaks District is a nice outdoor strip, walkable</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=Opera+Gallery+4444+Westheimer+Rd+Houston+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item night">
+      <div class="rr-time">19:00</div>
+      <div class="rr-tag">Evening · Dinner + Nightlife</div>
+      <div class="rr-name">Montrose for the Night</div>
+      <div class="rr-desc">Drive east on Westheimer into Montrose — Houston's most walkable, most alive neighborhood. Dinner somewhere lighter after the afternoon hot pot (Kata Robata for excellent Japanese, Hugo's if you want Mexican that actually means something). Then walk Westheimer or hit Axelrad beer garden if the weather holds.</div>
+      <div class="rr-note">Parking on Westheimer weekends is brutal — Uber this leg from the hotel</div>
+    </div>
+
+  </div>
+  </div>
+
+</div>
 </section>
 
 <hr class="thin">
 
-<!-- ═══════════════════════════════════════
-     DAY 3 · MONDAY MAY 25
-════════════════════════════════════════ -->
-<section class="day-section">
-  <div class="container">
+<!-- ══════════════════════════════════════════════
+     DAY 02 — SUNDAY MAY 24
+══════════════════════════════════════════════ -->
+<section>
+<div class="container">
 
-    <div class="day-header fade-up fade-up-1">
-      <img class="day-header-img"
-        src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80&fit=crop"
-        onerror="this.src='https://picsum.photos/seed/brunch-coffee/1200/400'"
-        alt="Brunch table with coffee and food">
-      <div class="day-header-overlay"></div>
-      <div class="day-header-text">
-        <div class="day-number">Day 03 · Monday, May 25</div>
-        <h2 class="day-title">One Last Bite, Then Back to Austin</h2>
-        <div class="day-date">Downtown → Midtown → I-10 W</div>
+  <div class="day-hero dh-2 fu fu-1" data-num="02">
+    <div class="dh-inner">
+      <div class="dh-eyebrow">Day 02 · Sunday, May 24</div>
+      <h2 class="dh-title">Masterpieces Before Noon,<br>Skewers After Dark</h2>
+      <div class="dh-route">Museum District → Menil → Montrose → Bellaire / Chinatown</div>
+      <div class="dh-chips">
+        <span class="dh-chip">MFAH Berggruen opening weekend</span>
+        <span class="dh-chip">Picasso · Klee · Matisse</span>
+        <span class="dh-chip">Menil Collection (free)</span>
+        <span class="dh-chip">Gao's Kabob · chuanr</span>
+        <span class="dh-chip">Bellaire late night</span>
       </div>
-    </div>
-
-    <div class="chips fade-up fade-up-2">
-      <span class="chip">Slow morning</span>
-      <span class="chip">Midtown brunch</span>
-      <span class="chip">Checkout by noon</span>
-      <span class="chip">On I-10 by 3 PM</span>
-    </div>
-
-    <div class="timeline fade-up fade-up-3">
-
-      <div class="timeline-item">
-        <div class="timeline-time">09:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Morning — No alarm</div>
-          <div class="timeline-desc">Sleep in. You have time. Pack leisurely, check the room, get the bags to the lobby. Checkout is noon.</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">10:30</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Brunch in Midtown</div>
-          <div class="timeline-desc">The Grove at Discovery Green if you want a patio and the skyline view. Breakfast Klub if you're willing to wait in line (it's worth it — catfish and waffles, no apology). Or Common Bond downtown for something lower key and excellent.</div>
-          <div class="timeline-note">Breakfast Klub opens at 7 AM · line forms early · worth every minute</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">12:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Hotel Checkout</div>
-          <div class="timeline-desc">Check out of the AC Hotel, load the car. If you want to squeeze in a coffee or a quick walk through Discovery Green (two blocks from the hotel), it's a pleasant 20-minute loop.</div>
-          <div class="timeline-note">Request late checkout the night before · many Marriott properties grant 1 PM</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">13:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Optional: Grab a Snack for the Road</div>
-          <div class="timeline-desc">Ninfa's on Navigation (the original location, 2704 Navigation) is a 10-minute detour but one of the most storied Mexican restaurants in Houston. Get the original tacos al carbon for the drive. Or grab something from the H-E-B on Waugh if you want road snacks.</div>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-time">15:00</div>
-        <div class="timeline-body">
-          <div class="timeline-name">Depart Houston — I-10 W</div>
-          <div class="timeline-desc">Aim for wheels rolling by 3 PM. Monday afternoon is lighter traffic than Friday — you should land in Austin by 5:30 to 5:45 PM.</div>
-          <div class="timeline-note">Watch I-10 through Katy/Beltway 8 interchange · slowest stretch on the way back</div>
-        </div>
-      </div>
-
     </div>
   </div>
+
+  <div class="rr-wrap">
+  <div class="rr-track">
+
+    <div class="rr-item drive">
+      <div class="rr-time">09:30</div>
+      <div class="rr-tag">Morning</div>
+      <div class="rr-name">Slow Start — Coffee, No Alarm</div>
+      <div class="rr-desc">Hotel lobby bar or walk to Koffeteria (two blocks from the AC Hotel) for a proper cup. The museum opens at 10 AM on Sundays and you want to beat the crowds — but not at the cost of feeling rushed.</div>
+    </div>
+
+    <div class="rr-item culture">
+      <div class="rr-time">10:30</div>
+      <div class="rr-tag">Art · Ticketed</div>
+      <div class="rr-name">MFAH — Picasso · Klee · Matisse: Masterpieces from Museum Berggruen</div>
+      <div class="rr-desc">1001 Bissonnet St. This exhibition opens May 20 — you're there in its first weekend. It's the U.S. debut of Heinz Berggruen's collection: 95+ paintings, watercolors, drawings, and sculptures. Picasso and Klee's entire careers covered. Matisse's paper cutouts. Giacometti's elongated sculptures and paintings. Drawings by Cézanne and Braque. It runs through September, but opening weekend is the uncrowded window before word gets out. Budget 2–2.5 hours inside.</div>
+      <div class="rr-note">Timed-entry tickets required · buy at mfah.org before you go · ~$25–30 pp · opens 10 AM Sun · take Main St south from downtown (toll-free)</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=Museum+Fine+Arts+Houston+1001+Bissonnet+St+Houston+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item culture">
+      <div class="rr-time">13:00</div>
+      <div class="rr-tag">Art · Free Admission</div>
+      <div class="rr-name">The Menil Collection</div>
+      <div class="rr-desc">1533 Sul Ross St — a 5-minute walk from the museum. One of the great free art museums in America. Renzo Piano building, Surrealism rooms that hit differently than anything at a traditional museum, and the Rothko Chapel next door (15 charged paintings in a silent octagonal space). The Cy Twombly Gallery is across the street and worth 20 minutes. If you only have 45 minutes here, spend it all in the main building's Surrealism wing.</div>
+      <div class="rr-note">Free · closed Tuesdays · opens 11 AM · the neighborhood around it (Montrose) is beautiful to walk</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=Menil+Collection+1533+Sul+Ross+St+Houston+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item food">
+      <div class="rr-time">14:30</div>
+      <div class="rr-tag">Lunch · Montrose</div>
+      <div class="rr-name">Montrose Lunch</div>
+      <div class="rr-desc">Stay in the Montrose / Museum District for lunch — you're in the right neighborhood. Common Bond Bistro on Westheimer for a great sandwich and the best croissant in Houston. Or Indika on Alabama St for Indian that's genuinely special. Sit outside if it's not too hot.</div>
+    </div>
+
+    <div class="rr-item drive">
+      <div class="rr-time">16:30</div>
+      <div class="rr-tag">Drive · Southwest</div>
+      <div class="rr-name">Head to Bellaire / Chinatown</div>
+      <div class="rr-desc">Take Westheimer west to Hillcroft, then south to Bellaire Blvd — all toll-free surface streets. You'll know you've arrived when every sign switches to Chinese and the strip malls start looking like they could be in Chengdu. Drive Bellaire from Hillcroft to Gessner slowly — there's a lot to see.</div>
+      <div class="rr-note">Toll-free: Westheimer west → Hillcroft south → Bellaire Blvd · avoid I-69 express lanes (tolled)</div>
+    </div>
+
+    <div class="rr-item food">
+      <div class="rr-time">18:30</div>
+      <div class="rr-tag">Food · Chinese BBQ</div>
+      <div class="rr-name">Gao's Kabob — Chuanr / Chinese Skewers</div>
+      <div class="rr-desc">9888 Bellaire Blvd, Suite 118. Northeast Chinese-style BBQ skewers — lamb is the uncontested headliner. Charcoal-grilled, cumin-heavy, dried chili, properly smoky. Order the lamb skewers (minimum six), garlic scallops, corn, green beans. Beer tower. It's also a music bar so the energy picks up late. This is the anti-upscale spot — loud, fun, nothing to prove.</div>
+      <div class="rr-note">Open Sundays noon–2 AM · no reservation needed · cash-friendly · the parking lot is fine</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=Gao%27s+Kabob+9888+Bellaire+Blvd+Houston+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item night">
+      <div class="rr-time">21:00</div>
+      <div class="rr-tag">Night · Bellaire</div>
+      <div class="rr-name">Bellaire After Dark</div>
+      <div class="rr-desc">The strip stays awake past midnight. Boba shops open late, karaoke options nearby if the night takes a turn. Or Uber back to downtown and call it a very full day.</div>
+      <div class="rr-note">Uber from Bellaire to downtown: ~$18–25</div>
+    </div>
+
+  </div>
+  </div>
+
+</div>
 </section>
 
 <hr class="thin">
 
-<!-- ═══════════════════════════════════════
+<!-- ══════════════════════════════════════════════
+     DAY 03 — MONDAY MAY 25
+══════════════════════════════════════════════ -->
+<section>
+<div class="container">
+
+  <div class="day-hero dh-3 fu fu-1" data-num="03">
+    <div class="dh-inner">
+      <div class="dh-eyebrow">Day 03 · Monday, May 25</div>
+      <h2 class="dh-title">One Last Plate,<br>Then Back to Austin</h2>
+      <div class="dh-route">Downtown → Midtown → East End → I-10 W → Austin</div>
+      <div class="dh-chips">
+        <span class="dh-chip">Slow morning</span>
+        <span class="dh-chip">Breakfast Klub</span>
+        <span class="dh-chip">Ninfa's on Navigation</span>
+        <span class="dh-chip">On I-10 by 3 PM</span>
+        <span class="dh-chip">Austin by 6 PM</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="rr-wrap">
+  <div class="rr-track">
+
+    <div class="rr-item hotel">
+      <div class="rr-time">09:00</div>
+      <div class="rr-tag">Morning</div>
+      <div class="rr-name">No Alarm</div>
+      <div class="rr-desc">Sleep in. Pack slowly. Checkout is noon — you have time. Request late checkout the night before (Marriott properties often grant 1 PM without issue).</div>
+      <div class="rr-note">Request 1 PM checkout the night before</div>
+    </div>
+
+    <div class="rr-item food">
+      <div class="rr-time">09:45</div>
+      <div class="rr-tag">Food · Breakfast</div>
+      <div class="rr-name">Breakfast Klub</div>
+      <div class="rr-desc">3711 Travis St, Midtown. The Houston breakfast institution. The line is part of the experience — it forms before 7 AM and moves steadily. Catfish and waffles is the order. Not a metaphor, not a trend — actual catfish on actual waffles with actual maple syrup, and it works completely. No pretense, generous portions, cash welcome.</div>
+      <div class="rr-note">Opens 7 AM · arrive early to beat the line · ~15 min from hotel on surface streets (toll-free)</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=Breakfast+Klub+3711+Travis+St+Houston+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item hotel">
+      <div class="rr-time">11:30</div>
+      <div class="rr-tag">Hotel · Checkout</div>
+      <div class="rr-name">AC Hotel Checkout</div>
+      <div class="rr-desc">Load the car, do a final sweep. Discovery Green is two blocks away if you want a quick outdoor loop before getting on the freeway. It's a pleasant 20 minutes.</div>
+    </div>
+
+    <div class="rr-item food">
+      <div class="rr-time">12:30</div>
+      <div class="rr-tag">Food · Optional Detour</div>
+      <div class="rr-name">Ninfa's on Navigation — Tacos for the Road</div>
+      <div class="rr-desc">2704 Navigation Blvd — a 10-minute drive from downtown, and it's loosely on the way to I-10 E (which you'll briefly take east before looping back west). This is the original Ninfa's, where tacos al carbon were invented in 1973. Not the chain. The restaurant. Order the original tacos to go if you're not stopping — they travel beautifully for the first hour of the drive.</div>
+      <div class="rr-note">Worth the detour · toll-free via Navigation Blvd from downtown</div>
+      <br><a class="rr-maps" href="https://maps.google.com/?q=Ninfa%27s+on+Navigation+2704+Navigation+Blvd+Houston+Texas" target="_blank">→ Google Maps</a>
+    </div>
+
+    <div class="rr-item drive">
+      <div class="rr-time">14:30</div>
+      <div class="rr-tag">Drive · Return</div>
+      <div class="rr-name">I-10 West to Austin</div>
+      <div class="rr-desc">Take I-10 W — the same road you came in on, reversed. Completely toll-free. The slowest stretch is usually the Katy/Beltway 8 interchange, but Monday afternoon is lighter than Friday evening. You should land Austin by 5:30–5:45 PM with a 2:30 PM departure.</div>
+      <div class="rr-note">🛣 Toll-free I-10 W the whole way · slowest section: Katy/Beltway 8 interchange around mile 740 · do NOT use Beltway 8 to shortcut — it's tolled</div>
+    </div>
+
+  </div>
+  </div>
+
+</div>
+</section>
+
+<hr class="thin">
+
+<!-- ══════════════════════════════════════════════
      FOOD HIT LIST
-════════════════════════════════════════ -->
+══════════════════════════════════════════════ -->
 <section>
-  <div class="container">
-    <div class="section-label">Food Hit List</div>
-    <h2 class="section-title">Every Table Worth Your Time</h2>
-    <p class="section-sub">Every restaurant on this trip with maps links, price ranges, and one honest sentence.</p>
+<div class="container">
+  <div class="sec-label">Food Hit List</div>
+  <h2 class="sec-title">Every Table Worth Your Time</h2>
+  <p class="sec-sub">Maps links, price tags, and one honest sentence each.</p>
 
-    <div class="food-grid">
+  <div class="food-grid">
 
-      <!-- HAIDILAO -->
-      <div class="food-card">
-        <img class="food-card-img"
-          src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80&fit=crop"
-          onerror="this.src='https://picsum.photos/seed/hot-pot-chinese/800/320'"
-          alt="Chinese hot pot">
-        <div class="food-card-body">
-          <div class="food-card-top">
-            <a href="https://maps.google.com/?q=Haidilao+Hot+Pot+Katy+Texas" target="_blank" class="food-card-name">Haidilao Hot Pot</a>
-            <span class="food-card-price">$$$</span>
-          </div>
-          <div class="food-card-tags">
-            <span class="food-tag">Chinese Hot Pot</span>
-            <span class="food-tag">AYCE</span>
-            <span class="food-tag">Tableside service</span>
-            <span class="food-tag">Katy (35 min)</span>
-          </div>
-          <div class="food-card-pitch">The noodle-pulling performance is worth the drive to Katy alone — this is hot pot elevated to theater, with broth quality that actually reflects the price tag.</div>
-          <a href="https://maps.google.com/?q=Haidilao+Hot+Pot+23220+Grand+Cir+Blvd+Katy+Texas" target="_blank" class="food-card-maps">→ Google Maps</a>
+    <div class="fc">
+      <img class="fc-img"
+        src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80&fit=crop"
+        onerror="this.src='https://picsum.photos/seed/chinese-hotpot/800/310'"
+        alt="Chinese hot pot">
+      <div class="fc-body">
+        <div class="fc-top">
+          <a href="https://maps.google.com/?q=Haidilao+Hot+Pot+23220+Grand+Cir+Blvd+Katy+Texas" target="_blank" class="fc-name">Haidilao Hot Pot · Katy</a>
+          <span class="fc-price">$$$</span>
         </div>
+        <div class="fc-tags"><span class="fc-tag">Chinese Hot Pot</span><span class="fc-tag">AYCE</span><span class="fc-tag">Tableside</span><span class="fc-tag">Katy · I-10</span></div>
+        <div class="fc-pitch">The noodle-pulling show is worth the drive — this is hot pot elevated to theater, with broth quality that actually earns the price tag.</div>
+        <a href="https://maps.google.com/?q=Haidilao+Hot+Pot+23220+Grand+Cir+Blvd+Katy+Texas" target="_blank" class="fc-maps">→ Google Maps</a>
       </div>
-
-      <!-- GAO'S KABOB -->
-      <div class="food-card">
-        <img class="food-card-img"
-          src="https://images.unsplash.com/photo-1529042410853-18c1b5878d7c?w=800&q=80&fit=crop"
-          onerror="this.src='https://picsum.photos/seed/chinese-skewers-grill/800/320'"
-          alt="Chinese BBQ skewers on grill">
-        <div class="food-card-body">
-          <div class="food-card-top">
-            <a href="https://maps.google.com/?q=Gao%27s+Kabob+9888+Bellaire+Blvd+Houston+Texas" target="_blank" class="food-card-name">Gao's Kabob</a>
-            <span class="food-card-price">$$</span>
-          </div>
-          <div class="food-card-tags">
-            <span class="food-tag">Chuanr / Skewers</span>
-            <span class="food-tag">NE Chinese BBQ</span>
-            <span class="food-tag">Music bar</span>
-            <span class="food-tag">Bellaire</span>
-          </div>
-          <div class="food-card-pitch">The lamb skewer is the move — cumin-heavy, charcoal-kissed, and exactly what you want at 9 PM on a Sunday with a beer tower on the table.</div>
-          <a href="https://maps.google.com/?q=Gao%27s+Kabob+9888+Bellaire+Blvd+Houston+Texas" target="_blank" class="food-card-maps">→ Google Maps</a>
-        </div>
-      </div>
-
-      <!-- NINFA'S -->
-      <div class="food-card">
-        <img class="food-card-img"
-          src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&q=80&fit=crop"
-          onerror="this.src='https://picsum.photos/seed/mexican-tacos-houston/800/320'"
-          alt="Tacos al carbon on a plate">
-        <div class="food-card-body">
-          <div class="food-card-top">
-            <a href="https://maps.google.com/?q=Ninfa%27s+on+Navigation+2704+Navigation+Blvd+Houston+Texas" target="_blank" class="food-card-name">Ninfa's on Navigation</a>
-            <span class="food-card-price">$$</span>
-          </div>
-          <div class="food-card-tags">
-            <span class="food-tag">Tex-Mex / Original</span>
-            <span class="food-tag">Tacos al Carbon</span>
-            <span class="food-tag">East End</span>
-          </div>
-          <div class="food-card-pitch">The original Ninfa's, where tacos al carbon were invented — not a chain, not a tribute, the actual restaurant. Order the original tacos for the drive home Monday.</div>
-          <a href="https://maps.google.com/?q=Ninfa%27s+2704+Navigation+Blvd+Houston+Texas" target="_blank" class="food-card-maps">→ Google Maps</a>
-        </div>
-      </div>
-
-      <!-- BREAKFAST KLUB -->
-      <div class="food-card">
-        <img class="food-card-img"
-          src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80&fit=crop"
-          onerror="this.src='https://picsum.photos/seed/breakfast-waffles-brunch/800/320'"
-          alt="Brunch plate with waffles">
-        <div class="food-card-body">
-          <div class="food-card-top">
-            <a href="https://maps.google.com/?q=Breakfast+Klub+3711+Travis+St+Houston+Texas" target="_blank" class="food-card-name">Breakfast Klub</a>
-            <span class="food-card-price">$$</span>
-          </div>
-          <div class="food-card-tags">
-            <span class="food-tag">Soul Food / Breakfast</span>
-            <span class="food-tag">Midtown</span>
-            <span class="food-tag">Opens 7 AM</span>
-          </div>
-          <div class="food-card-pitch">Catfish and waffles with a line out the door every morning — Houston institution, cash-friendly, no pretense, and worth every minute of the wait.</div>
-          <a href="https://maps.google.com/?q=Breakfast+Klub+3711+Travis+St+Houston+Texas" target="_blank" class="food-card-maps">→ Google Maps</a>
-        </div>
-      </div>
-
-      <!-- COMMON BOND -->
-      <div class="food-card">
-        <img class="food-card-img"
-          src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80&fit=crop"
-          onerror="this.src='https://picsum.photos/seed/bakery-coffee-shop/800/320'"
-          alt="Artisan coffee and pastries">
-        <div class="food-card-body">
-          <div class="food-card-top">
-            <a href="https://maps.google.com/?q=Common+Bond+Bistro+Bakery+Houston+Texas" target="_blank" class="food-card-name">Common Bond Bistro &amp; Bakery</a>
-            <span class="food-card-price">$$</span>
-          </div>
-          <div class="food-card-tags">
-            <span class="food-tag">Bakery / Café</span>
-            <span class="food-tag">Sandwiches</span>
-            <span class="food-tag">River Oaks / Midtown</span>
-          </div>
-          <div class="food-card-pitch">French-leaning bakery with the best croissants in Houston and sandwiches that hold up — good for a quick lunch between the gallery and wherever you're going next.</div>
-          <a href="https://maps.google.com/?q=Common+Bond+Bistro+Bakery+1706+Westheimer+Houston+Texas" target="_blank" class="food-card-maps">→ Google Maps</a>
-        </div>
-      </div>
-
-      <!-- KATA ROBATA -->
-      <div class="food-card">
-        <img class="food-card-img"
-          src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=800&q=80&fit=crop"
-          onerror="this.src='https://picsum.photos/seed/japanese-sushi-restaurant/800/320'"
-          alt="Japanese sushi platter">
-        <div class="food-card-body">
-          <div class="food-card-top">
-            <a href="https://maps.google.com/?q=Kata+Robata+3600+Kirby+Dr+Houston+Texas" target="_blank" class="food-card-name">Kata Robata</a>
-            <span class="food-card-price">$$$</span>
-          </div>
-          <div class="food-card-tags">
-            <span class="food-tag">Japanese / Sushi</span>
-            <span class="food-tag">Museum District</span>
-            <span class="food-tag">Consistently great</span>
-          </div>
-          <div class="food-card-pitch">Best sushi in Houston without the hype tax — consistently excellent omakase and izakaya dishes in a low-key space near the museum district.</div>
-          <a href="https://maps.google.com/?q=Kata+Robata+3600+Kirby+Dr+Houston+Texas" target="_blank" class="food-card-maps">→ Google Maps</a>
-        </div>
-      </div>
-
     </div>
+
+    <div class="fc">
+      <img class="fc-img"
+        src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80&fit=crop"
+        onerror="this.src='https://picsum.photos/seed/grilled-skewers-bbq/800/310'"
+        alt="Chinese BBQ skewers">
+      <div class="fc-body">
+        <div class="fc-top">
+          <a href="https://maps.google.com/?q=Gao%27s+Kabob+9888+Bellaire+Blvd+Houston+Texas" target="_blank" class="fc-name">Gao's Kabob · Bellaire</a>
+          <span class="fc-price">$$</span>
+        </div>
+        <div class="fc-tags"><span class="fc-tag">Chuanr / Skewers</span><span class="fc-tag">NE Chinese BBQ</span><span class="fc-tag">Late Night</span></div>
+        <div class="fc-pitch">The lamb skewer is the move — cumin-forward, charcoal-kissed, and exactly what you want at 9 PM with a beer tower on the table.</div>
+        <a href="https://maps.google.com/?q=Gao%27s+Kabob+9888+Bellaire+Blvd+Houston+Texas" target="_blank" class="fc-maps">→ Google Maps</a>
+      </div>
+    </div>
+
+    <div class="fc">
+      <img class="fc-img"
+        src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80&fit=crop"
+        onerror="this.src='https://picsum.photos/seed/breakfast-soul-food/800/310'"
+        alt="Soul food breakfast plate">
+      <div class="fc-body">
+        <div class="fc-top">
+          <a href="https://maps.google.com/?q=Breakfast+Klub+3711+Travis+St+Houston+Texas" target="_blank" class="fc-name">Breakfast Klub · Midtown</a>
+          <span class="fc-price">$$</span>
+        </div>
+        <div class="fc-tags"><span class="fc-tag">Soul Food</span><span class="fc-tag">Breakfast</span><span class="fc-tag">Opens 7 AM</span></div>
+        <div class="fc-pitch">Catfish and waffles with a line out the door every morning — Houston institution, no pretense, and worth every minute of the wait.</div>
+        <a href="https://maps.google.com/?q=Breakfast+Klub+3711+Travis+St+Houston+Texas" target="_blank" class="fc-maps">→ Google Maps</a>
+      </div>
+    </div>
+
+    <div class="fc">
+      <img class="fc-img"
+        src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&q=80&fit=crop"
+        onerror="this.src='https://picsum.photos/seed/mexican-tacos-texas/800/310'"
+        alt="Tacos al carbon">
+      <div class="fc-body">
+        <div class="fc-top">
+          <a href="https://maps.google.com/?q=Ninfa%27s+2704+Navigation+Blvd+Houston+Texas" target="_blank" class="fc-name">Ninfa's on Navigation</a>
+          <span class="fc-price">$$</span>
+        </div>
+        <div class="fc-tags"><span class="fc-tag">Original Tex-Mex</span><span class="fc-tag">Tacos al Carbon</span><span class="fc-tag">East End</span></div>
+        <div class="fc-pitch">The original Ninfa's — where tacos al carbon were invented in 1973. Not a chain, not a tribute. Get them to go for the drive home.</div>
+        <a href="https://maps.google.com/?q=Ninfa%27s+2704+Navigation+Blvd+Houston+Texas" target="_blank" class="fc-maps">→ Google Maps</a>
+      </div>
+    </div>
+
+    <div class="fc">
+      <img class="fc-img"
+        src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80&fit=crop"
+        onerror="this.src='https://picsum.photos/seed/bakery-pastry-croissant/800/310'"
+        alt="Artisan bakery croissant">
+      <div class="fc-body">
+        <div class="fc-top">
+          <a href="https://maps.google.com/?q=Common+Bond+Bistro+1706+Westheimer+Houston+Texas" target="_blank" class="fc-name">Common Bond Bistro</a>
+          <span class="fc-price">$$</span>
+        </div>
+        <div class="fc-tags"><span class="fc-tag">French Bakery</span><span class="fc-tag">Lunch</span><span class="fc-tag">River Oaks / Westheimer</span></div>
+        <div class="fc-pitch">Best croissant in Houston and a serious sandwich — grab a quick lunch between Opera Gallery and wherever you're headed next.</div>
+        <a href="https://maps.google.com/?q=Common+Bond+Bistro+1706+Westheimer+Houston+Texas" target="_blank" class="fc-maps">→ Google Maps</a>
+      </div>
+    </div>
+
+    <div class="fc">
+      <img class="fc-img"
+        src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=800&q=80&fit=crop"
+        onerror="this.src='https://picsum.photos/seed/japanese-sushi/800/310'"
+        alt="Japanese sushi plate">
+      <div class="fc-body">
+        <div class="fc-top">
+          <a href="https://maps.google.com/?q=Kata+Robata+3600+Kirby+Dr+Houston+Texas" target="_blank" class="fc-name">Kata Robata · Museum District</a>
+          <span class="fc-price">$$$</span>
+        </div>
+        <div class="fc-tags"><span class="fc-tag">Japanese / Omakase</span><span class="fc-tag">Izakaya</span><span class="fc-tag">Kirby</span></div>
+        <div class="fc-pitch">Best sushi in Houston without the hype tax — excellent omakase and izakaya in a no-ego space near the Menil.</div>
+        <a href="https://maps.google.com/?q=Kata+Robata+3600+Kirby+Dr+Houston+Texas" target="_blank" class="fc-maps">→ Google Maps</a>
+      </div>
+    </div>
+
   </div>
+</div>
 </section>
 
 <hr class="thin">
 
-<!-- ═══════════════════════════════════════
-     NEIGHBORHOOD GUIDE
-════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════
+     NEIGHBORHOODS
+══════════════════════════════════════════════ -->
 <section>
-  <div class="container">
-    <div class="section-label">Neighborhood Guide</div>
-    <h2 class="section-title">Four Corners of the City</h2>
-    <p class="section-sub">Houston is massive and car-dependent — knowing what each pocket is for saves you from wandering.</p>
-
-    <div class="hoods-grid" style="margin-top: 2rem;">
-
-      <div class="hood">
-        <div class="hood-name">Montrose</div>
-        <div class="hood-tag">Arts · Nightlife · Walkable (by Houston standards)</div>
-        <div class="hood-desc">The closest thing Houston has to a Brooklyn vibe — independent galleries, gay bars, art-house cinemas, and restaurants at every price point. The streets around Westheimer between Shepherd and Dunlavy are the beating heart. This is your daytime wander zone and your late-night fallback.</div>
-      </div>
-
-      <div class="hood">
-        <div class="hood-name">Bellaire / Chinatown</div>
-        <div class="hood-tag">Chinese Food · Night Markets · Strip Malls Worth It</div>
-        <div class="hood-desc">Along Bellaire Blvd from Fondren to Beltway 8 — Houston's second (and arguably better) Chinatown. Mostly Chinese-run businesses with little tourist infrastructure, which is exactly the point. Every strip mall has three restaurants worth visiting. Gao's Kabob, boba shops, and late-night noodles all live here.</div>
-      </div>
-
-      <div class="hood">
-        <div class="hood-name">River Oaks District</div>
-        <div class="hood-tag">Gallery Row · Upscale Shopping · See and Be Seen</div>
-        <div class="hood-desc">The outdoor luxury retail strip on Westheimer near the Galleria — where Opera Gallery just opened. It's a two-block walk from Uniqlo and a very easy afternoon pairing. Grab a coffee at Velvet Taco or Pondicheri, then walk the gallery. The architecture is pleasant and the people-watching is good.</div>
-      </div>
-
-      <div class="hood">
-        <div class="hood-name">Museum District / Midtown</div>
-        <div class="hood-tag">MFAH · Menil · Walkable Culture Zone</div>
-        <div class="hood-desc">A rare corner of Houston where you can actually walk between things. MFAH, the Menil Collection, the Rothko Chapel, and Cy Twombly Gallery all sit within a 15-minute walk of each other. The surrounding streets have coffee shops and casual lunch spots. Budget a full morning here and you'll leave satisfied.</div>
-      </div>
-
+<div class="container">
+  <div class="sec-label">Neighborhood Guide</div>
+  <h2 class="sec-title">Four Corners of the City</h2>
+  <p class="sec-sub">Houston is vast and car-dependent — knowing what each pocket is for saves you from wandering the wrong way.</p>
+  <div class="hoods" style="margin-top:2rem;">
+    <div class="hood">
+      <div class="hood-name">Montrose</div>
+      <div class="hood-tag">Arts · Nightlife · Most Walkable</div>
+      <div class="hood-desc">The closest thing Houston has to a Brooklyn sensibility — independent galleries, good restaurants at every price point, and the street life that most of Houston lacks. Westheimer between Shepherd and Dunlavy is the main drag. Your Saturday night and Sunday lunch zone.</div>
+    </div>
+    <div class="hood">
+      <div class="hood-name">Bellaire / Chinatown</div>
+      <div class="hood-tag">Chinese Food · Strip Mall Authenticity · Late Night</div>
+      <div class="hood-desc">Along Bellaire Blvd from Fondren to Beltway 8 — Houston's second and better Chinatown. Mostly Chinese-run, no tourist infrastructure, every strip mall holds three restaurants worth eating at. Gao's, boba till midnight, and a grocery store that will make you rethink what a grocery store is.</div>
+    </div>
+    <div class="hood">
+      <div class="hood-name">River Oaks District</div>
+      <div class="hood-tag">Gallery Row · Upscale Outdoor Retail</div>
+      <div class="hood-desc">Two blocks east of the Galleria on Westheimer — where Opera Gallery just opened. An outdoor luxury strip that's pleasant to walk, great coffee at Pondicheri, and easy to pair with a Uniqlo run. The art is the anchor, the rest is a bonus.</div>
+    </div>
+    <div class="hood">
+      <div class="hood-name">Museum District</div>
+      <div class="hood-tag">MFAH · Menil · Rothko Chapel · Walkable</div>
+      <div class="hood-desc">A rare corner of Houston where things are close enough to walk between. MFAH, the Menil, Rothko Chapel, and the Cy Twombly Gallery all within a 15-minute walk. Budget a full Sunday morning and you'll earn it.</div>
     </div>
   </div>
+</div>
 </section>
 
 <hr class="thin">
 
-<!-- ═══════════════════════════════════════
-     CULTURE HIGHLIGHTS
-════════════════════════════════════════ -->
-<section>
-  <div class="container">
-    <div class="section-label">Art &amp; Culture</div>
-    <h2 class="section-title">What's on the Walls</h2>
-    <p class="section-sub">Two venues, both confirmed open — one free, one ticketed, both worth it.</p>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
-
-      <div style="border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: var(--ivory);">
-        <img
-          src="https://images.unsplash.com/photo-1574958269340-fa927503f3dd?w=800&q=80&fit=crop"
-          onerror="this.src='https://picsum.photos/seed/monet-impressionist-art/800/320'"
-          alt="Impressionist paintings in gallery"
-          style="width:100%; height:160px; object-fit:cover; display:block;">
-        <div style="padding: 1.1rem 1.25rem 1.25rem;">
-          <div style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--terra); margin-bottom:0.4rem;">Free · River Oaks District</div>
-          <div style="font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:500; margin-bottom:0.4rem;">Opera Gallery Houston</div>
-          <div style="font-size:0.83rem; color:var(--stone); line-height:1.55; margin-bottom:0.6rem;">Opened March 2026 with original Monet, Picasso, Kusama, Chagall, Kehinde Wiley, and Keith Haring. The collection rotates continuously from their global network of 15 galleries — whatever's on the walls when you arrive will be significant. Free and open to the public.</div>
-          <a href="https://maps.google.com/?q=Opera+Gallery+4444+Westheimer+Rd+Houston+Texas" target="_blank" style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.06em; color:var(--terra); text-decoration:none; border-bottom: 1px solid var(--terra-pale);">→ 4444 Westheimer Rd · River Oaks District</a>
-        </div>
-      </div>
-
-      <div style="border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: var(--ivory);">
-        <img
-          src="https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?w=800&q=80&fit=crop"
-          onerror="this.src='https://picsum.photos/seed/picasso-klee-museum-modern/800/320'"
-          alt="Modern art museum exhibition space">
-        <div style="padding: 1.1rem 1.25rem 1.25rem;">
-          <div style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--terra); margin-bottom:0.4rem;">Ticketed · Opens May 20 · Museum District</div>
-          <div style="font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:500; margin-bottom:0.4rem;">MFAH — Picasso · Klee · Matisse</div>
-          <div style="font-size:0.83rem; color:var(--stone); line-height:1.55; margin-bottom:0.6rem;">U.S. debut of the Museum Berggruen's collection — 95+ works covering Picasso and Klee's full careers, Matisse's cutouts, Giacometti's sculptures, and Cézanne drawings. Opens May 20, runs through September. You'll catch it in its opening weekend.</div>
-          <a href="https://maps.google.com/?q=Museum+Fine+Arts+Houston+1001+Bissonnet+St+Houston+Texas" target="_blank" style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.06em; color:var(--terra); text-decoration:none; border-bottom: 1px solid var(--terra-pale);">→ 1001 Bissonnet St · Museum District</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<hr class="thin">
-
-<!-- ═══════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      PRACTICAL NOTES
-════════════════════════════════════════ -->
+══════════════════════════════════════════════ -->
 <section>
-  <div class="container">
-    <div class="section-label">Practical Notes</div>
-    <h2 class="section-title">Before You Leave the Hotel</h2>
-
-    <div class="practical-grid" style="margin-top: 2rem;">
-
-      <div class="practical-item">
-        <div class="practical-title">Parking in Houston</div>
-        <div class="practical-body">The Galleria has free garage parking. Downtown near the AC Hotel is metered or use the ParkHouston app. Museum District has street parking and a free lot on Bissonnet. Bellaire: park in a strip mall lot — it's fine.</div>
-      </div>
-
-      <div class="practical-item">
-        <div class="practical-title">Uber vs. Driving</div>
-        <div class="practical-body">Drive to Katy for Haidilao — it's a freeway trip, easy to park. Uber for anything within the loop at night, especially after dinner and drinks in Bellaire. Surge pricing in Montrose on weekend nights is real — budget accordingly or walk a block before requesting.</div>
-      </div>
-
-      <div class="practical-item">
-        <div class="practical-title">Weather in Late May</div>
-        <div class="practical-body">Houston in late May: hot, humid, and occasionally stormy. Highs around 88–92°F, humidity makes it feel 95+. Dress in breathable fabrics. Afternoon thunderstorms are common and fast-moving — don't let them ruin your plans, just duck inside for 20 minutes.</div>
-      </div>
-
-      <div class="practical-item">
-        <div class="practical-title">Haidilao Reservations</div>
-        <div class="practical-body">This is the one thing that can crater the trip if you ignore it. Reserve on their app or by phone well in advance. Walk-in wait on a Saturday evening regularly exceeds 90 minutes. Book your Saturday dinner time before you leave Austin.</div>
-      </div>
-
-      <div class="practical-item">
-        <div class="practical-title">MFAH Tickets</div>
-        <div class="practical-body">The Berggruen exhibition requires separate timed-entry tickets. Buy online at mfah.org before you arrive — this is opening weekend and it will draw crowds. General admission ~$20–30 per person, check the site for current pricing.</div>
-      </div>
-
-      <div class="practical-item">
-        <div class="practical-title">The Bellaire Corridor</div>
-        <div class="practical-body">Bellaire Blvd from Fondren to Beltway 8 is a strip-mall corridor — not Instagram-pretty, but completely authentic. Don't be put off by the aesthetics. The food is better than anything in a curated food hall.</div>
-      </div>
-
+<div class="container">
+  <div class="sec-label">Practical Notes</div>
+  <h2 class="sec-title">Before You Leave the Hotel</h2>
+  <div class="practical" style="margin-top:2rem;">
+    <div class="prac">
+      <div class="prac-title">Toll-Free Routing</div>
+      <div class="prac-body">I-10 E/W is free the entire Austin–Houston corridor. Within Houston, use surface streets: Westheimer, Kirby, Main, Montrose Blvd, Bellaire Blvd. Hard avoids: Beltway 8 (entire loop is tolled), Grand Pkwy / TX-99, Westpark Tollway, Hardy Tollway. To reach Haidilao in Katy from I-10: exit at Mason Rd or Katy Fort Bend Country Road, both free.</div>
+    </div>
+    <div class="prac">
+      <div class="prac-title">Parking vs Uber</div>
+      <div class="prac-body">Drive to Katy — freeway trip, easy free parking. Drive to the Galleria — free garage. Uber for Montrose and Bellaire nights after drinks. Surge pricing in Montrose on weekends: walk one block from the main strip before requesting and you'll save $6.</div>
+    </div>
+    <div class="prac">
+      <div class="prac-title">Houston in Late May</div>
+      <div class="prac-body">Hot, humid, occasionally dramatic. Highs of 88–93°F, humidity makes it feel 95+. Dress in breathable fabrics — linens from Uniqlo are actually useful here. Afternoon thunderstorms are common, move fast, and clear in 20 minutes. Don't cancel plans for one.</div>
+    </div>
+    <div class="prac">
+      <div class="prac-title">Haidilao — Reserve First</div>
+      <div class="prac-body">This is the one thing that can ruin the trip if ignored. Reserve on their app or by phone before you leave Austin. Walk-in wait on a Saturday can exceed 90 minutes. Book the reservation, confirm it the morning of, show up on time.</div>
+    </div>
+    <div class="prac">
+      <div class="prac-title">MFAH Berggruen Tickets</div>
+      <div class="prac-body">Timed-entry tickets required for the Picasso-Klee-Matisse exhibition. Buy online at mfah.org — it's opening weekend and it will draw a crowd. General admission ~$25–30 per person, check the site for current pricing and time slots.</div>
+    </div>
+    <div class="prac">
+      <div class="prac-title">Opera Gallery — Just Walk In</div>
+      <div class="prac-body">No ticket, no reservation, no commitment. Free admission. Walk in, look at the Monet, walk out. The River Oaks District is a pleasant 20-minute wander regardless — coffee, people-watching, and a park strip worth seeing.</div>
     </div>
   </div>
+</div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     FOOTER
-════════════════════════════════════════ -->
 <footer>
-  <div class="container">
-    <div class="footer-text">Wendy &amp; Lang · Houston, Texas · May 23–25, 2026</div>
-    <div class="footer-text" style="margin-top:0.5rem; opacity:0.5;">Food-first. Urban. Unhurried.</div>
-  </div>
+<div class="container">
+  <div class="footer-text">Wendy &amp; Lang · Houston, Texas · May 23–25, 2026</div>
+  <div class="footer-text" style="margin-top:0.4rem; opacity:0.45;">Food-first. Urban. Unhurried.</div>
+</div>
 </footer>
+
+<!-- ══════════════════════════════════════════════
+     LEAFLET MAP SCRIPT
+══════════════════════════════════════════════ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function() {
+  // ── Data ──
+  const days = [
+    {
+      id: 1, label: "Day 01 · Sat", color: "#C0614A", lightColor: "#F0DDD8",
+      stops: [
+        { n:1, name:"Depart Austin", sub:"I-10 E · Toll-free all the way", lat:30.2672, lng:-97.7431, type:"drive" },
+        { n:2, name:"Haidilao Hot Pot", sub:"23220 Grand Cir Blvd, Katy · Reserve in advance", lat:29.7410, lng:-95.7580, type:"food" },
+        { n:3, name:"AC Hotel Houston Downtown", sub:"723 Main St · Drop bags, check in", lat:29.7557, lng:-95.3659, type:"hotel" },
+        { n:4, name:"Uniqlo · The Galleria", sub:"5085 Westheimer Rd · ~45 min", lat:29.7367, lng:-95.4619, type:"shopping" },
+        { n:5, name:"Opera Gallery Houston", sub:"4444 Westheimer · Monet, Picasso, Kusama · Free", lat:29.7393, lng:-95.4651, type:"culture" },
+        { n:6, name:"Montrose Evening", sub:"Dinner + nightlife · Uber from hotel", lat:29.7448, lng:-95.3933, type:"night" }
+      ]
+    },
+    {
+      id: 2, label: "Day 02 · Sun", color: "#3D7A8A", lightColor: "#D3E8EF",
+      stops: [
+        { n:1, name:"MFAH — Berggruen", sub:"1001 Bissonnet St · Opening weekend · Timed tickets", lat:29.7256, lng:-95.3940, type:"culture" },
+        { n:2, name:"The Menil Collection", sub:"1533 Sul Ross St · Free · Rothko Chapel next door", lat:29.7327, lng:-95.3979, type:"culture" },
+        { n:3, name:"Montrose Lunch", sub:"Common Bond / Indika / walk Westheimer", lat:29.7448, lng:-95.3933, type:"food" },
+        { n:4, name:"Gao's Kabob · Bellaire", sub:"9888 Bellaire Blvd · Lamb skewers · Beer towers · Open til 2 AM", lat:29.6892, lng:-95.5245, type:"food" }
+      ]
+    },
+    {
+      id: 3, label: "Day 03 · Mon", color: "#8A6E5A", lightColor: "#E5DCD8",
+      stops: [
+        { n:1, name:"Breakfast Klub", sub:"3711 Travis St · Catfish & waffles · Opens 7 AM", lat:29.7389, lng:-95.3764, type:"food" },
+        { n:2, name:"Ninfa's on Navigation", sub:"2704 Navigation Blvd · Original tacos al carbon · To-go for the road", lat:29.7498, lng:-95.3366, type:"food" },
+        { n:3, name:"Return to Austin", sub:"I-10 W · Toll-free · Austin by 5:30 PM", lat:30.2672, lng:-97.7431, type:"drive" }
+      ]
+    }
+  ];
+
+  const typeIcons = {
+    food:     "🍜", drive:    "🚗", hotel:    "🏨",
+    shopping: "🛍", culture:  "🖼", night:    "🌃"
+  };
+
+  // ── Map init ──
+  const map = L.map('trip-map', { zoomControl: true });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  // ── Create marker icon ──
+  function makeIcon(color, num) {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+      <path d="M16 0C7.163 0 0 7.163 0 16c0 10 16 24 16 24S32 26 32 16C32 7.163 24.837 0 16 0z" fill="${color}"/>
+      <text x="16" y="20" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700">${num}</text>
+    </svg>`;
+    return L.divIcon({
+      html: svg,
+      className: '',
+      iconSize: [32, 40],
+      iconAnchor: [16, 40],
+      popupAnchor: [0, -42]
+    });
+  }
+
+  // ── Build layers per day ──
+  const layerGroups = {};
+  let allBounds = [];
+  let globalN = 0;
+
+  days.forEach(day => {
+    const lg = L.layerGroup();
+    const latlngs = [];
+
+    day.stops.forEach(stop => {
+      globalN++;
+      const ll = [stop.lat, stop.lng];
+      latlngs.push(ll);
+      allBounds.push(ll);
+
+      const icon = makeIcon(day.color, stop.n);
+      const marker = L.marker(ll, { icon }).addTo(lg);
+      marker.bindPopup(`
+        <div class="popup-day">${day.label} · Stop ${stop.n}</div>
+        <div class="popup-name">${typeIcons[stop.type] || ''} ${stop.name}</div>
+        <div class="popup-note">${stop.sub}</div>
+      `);
+    });
+
+    // Route polyline for this day
+    if (latlngs.length > 1) {
+      L.polyline(latlngs, {
+        color: day.color,
+        weight: 2.5,
+        opacity: 0.65,
+        dashArray: '6, 5'
+      }).addTo(lg);
+    }
+
+    layerGroups[day.id] = lg;
+    lg.addTo(map);
+  });
+
+  // ── Fit to all stops ──
+  map.fitBounds(allBounds, { padding: [40, 40] });
+
+  // ── Tab switching ──
+  const tabs = document.querySelectorAll('.map-tab');
+
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      const day = btn.dataset.day;
+
+      if (day === 'all') {
+        days.forEach(d => layerGroups[d.id].addTo(map));
+        map.fitBounds(allBounds, { padding: [40, 40] });
+      } else {
+        const dayId = parseInt(day);
+        days.forEach(d => {
+          if (d.id === dayId) {
+            layerGroups[d.id].addTo(map);
+            const bounds = d.stops.map(s => [s.lat, s.lng]);
+            map.fitBounds(bounds, { padding: [60, 60] });
+          } else {
+            map.removeLayer(layerGroups[d.id]);
+          }
+        });
+      }
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
