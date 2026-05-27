@@ -20,6 +20,10 @@ export type ProjectCategory = typeof PROJECT_CATEGORIES[number]
 export interface Project {
   title: string
   description: string
+  /** Short line under the title in list view */
+  subtitle?: string
+  /** Bullet highlights for featured / list presentation */
+  highlights?: string[]
   tags: string[]
   categories: Exclude<ProjectCategory, 'All'>[]
   github: string

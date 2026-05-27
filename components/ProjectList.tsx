@@ -5,10 +5,21 @@ import Image from 'next/image'
 import { tenWeeksTenAppsProjects, projects } from '@/data/portfolio'
 import { Project, PROJECT_CATEGORIES, ProjectCategory } from '@/types'
 
-const allProjects: Project[] = [
+const PINNED_TITLES = ['Graduation Trend', 'ccDashboard'] as const
+
+function orderProjects(list: Project[]): Project[] {
+  const pinned = PINNED_TITLES.map((title) =>
+    list.find((p) => p.title === title)
+  ).filter((p): p is Project => !!p)
+  const pinnedSet = new Set(pinned.map((p) => p.title))
+  const rest = list.filter((p) => !pinnedSet.has(p.title))
+  return [...pinned, ...rest]
+}
+
+const allProjects: Project[] = orderProjects([
   ...tenWeeksTenAppsProjects,
   ...projects,
-]
+])
 
 type SortOption = 'default' | 'newest' | 'oldest'
 
@@ -80,10 +91,30 @@ const ListCard = ({ project, index }: { project: Project; index: number }) => {
               <Tag key={tag} tag={tag} />
             ))}
           </div>
-          <h3 className="text-3xl md:text-4xl font-black text-black dark:text-white uppercase tracking-tight leading-tight mb-4">
+          <h3 className="text-3xl md:text-4xl font-black text-black dark:text-white uppercase tracking-tight leading-tight mb-2">
             {project.title}
           </h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-6 max-w-lg">{project.description}</p>
+          {project.subtitle && (
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 max-w-lg">
+              {project.subtitle}
+            </p>
+          )}
+          <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 max-w-lg">
+            {project.description}
+          </p>
+          {project.highlights && project.highlights.length > 0 && (
+            <ul className="space-y-2 mb-6 max-w-lg border-l-2 border-gray-200 dark:border-gray-700 pl-4">
+              {project.highlights.map((item) => (
+                <li
+                  key={item}
+                  className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex gap-2"
+                >
+                  <span className="text-black dark:text-white font-bold shrink-0">→</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
           <div className="flex flex-wrap items-center gap-4">
             <ProjectLink href={project.github} label="View Code" />
             {project.url && <ProjectLink href={project.url} label="Live Demo" />}
@@ -136,7 +167,10 @@ const GridCard = ({ project }: { project: Project }) => (
           <Tag key={tag} tag={tag} />
         ))}
       </div>
-      <h3 className="font-bold text-black dark:text-white mb-2 text-lg leading-tight">{project.title}</h3>
+      <h3 className="font-bold text-black dark:text-white mb-1 text-lg leading-tight">{project.title}</h3>
+      {project.subtitle && (
+        <p className="text-[11px] text-gray-500 dark:text-gray-400 mb-2 line-clamp-1">{project.subtitle}</p>
+      )}
       <p className="text-gray-600 dark:text-gray-400 text-xs mb-4 leading-relaxed line-clamp-3">{project.description}</p>
       <div className="flex flex-wrap gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
         <ProjectLink href={project.github} label="Code" />
@@ -199,9 +233,12 @@ const ProjectList = () => {
     ? allProjects
     : allProjects.filter((p) => p.categories.includes(activeCategory as Exclude<ProjectCategory, 'All'>))
 
-  const allFilteredProjects = sort === 'default'
-    ? baseFiltered
-    : [...baseFiltered].reverse()
+  const allFilteredProjects =
+    sort === 'default'
+      ? baseFiltered
+      : sort === 'newest'
+        ? [...baseFiltered].reverse()
+        : baseFiltered
 
   // In default "All" view, limit to 6 unless expanded
   const filteredProjects = (!isFocusMode && !showAll)

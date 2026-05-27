@@ -172,6 +172,28 @@ export const tenWeeksTenAppsProjects: Project[] = [
 // Regular Projects (excluding 10weeks10apps)
 export const projects: Project[] = [
   {
+    title: 'Graduation Trend',
+    subtitle: '2026 commencement intelligence dashboard',
+    description:
+      'A dashboard-first Next.js product that tracks commencement speakers across US News top 50 universities. It combines source-backed speaker research, ceremony-type caveats, topic clustering, regional/rank-band charts, an interactive Leaflet map, speaker profiles, and a production-safe JSON fallback so the product can run without a local SQLite file.',
+    highlights: [
+      'Redesigned landing page with live KPIs, bento navigation, and featured speaker cards',
+      'Analytics dashboard for archetypes, topic frequency, ceremony mix, regions, and rank bands',
+      'Map explorer with Map → University → Speaker → Topic hierarchy',
+      '49/50 researched speakers with fact-check notes and ceremony honesty labels',
+      'Next.js 14 App Router, SQLite + Drizzle, React Leaflet, Tailwind, and pure SVG charts',
+    ],
+    tags: ['Next.js 14', 'TypeScript', 'SQLite', 'Drizzle', 'Leaflet', 'Data Viz', 'Tailwind'],
+    categories: ['🚀 Top Picks', 'AI/ML', 'Web Apps'],
+    github: 'https://github.com/lgui30/graduationTrend',
+    image: '/images/graduation-trend-home.png',
+    images: [
+      '/images/graduation-trend-home.png',
+      '/images/graduation-trend-dashboard.png',
+      '/images/graduation-trend-map.png',
+    ],
+  },
+  {
     title: 'ccDashboard',
     description: 'Analytics dashboard for Claude Code — track spending, sessions, efficiency, and tool usage across all projects. Features cost tracking, weekly wrapped summaries, activity heatmaps, efficiency scoring, tool analytics, and an AI Memory Manager that extracts knowledge from sessions into CLAUDE.md.',
     tags: ['Developer Tools', 'Node.js', 'Express', 'Analytics', 'CLI'],
