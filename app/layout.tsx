@@ -6,13 +6,13 @@ import './globals.css'
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Zhilang (Lang) Gui | AI Engineer',
-  description: 'AI Engineer building multi-agent systems, production RAG pipelines, and shipping AI-powered products from 0→1. BU Computer Engineering \'25. 10 apps in 10 weeks. AWS hackathon winner.',
-  keywords: ['AI Engineer', 'Machine Learning', 'LangGraph', 'Multi-Agent Systems', 'RAG', 'Full-Stack', 'Boston University', 'Computer Engineering', 'San Francisco'],
+  title: 'Zhilang (Lang) Gui | FDE at Galatiq',
+  description: 'Forward Deployed Engineer at Galatiq building AI solutions for Fortune 500 teams, multi-agent systems, production RAG pipelines, and AI-powered products from 0→1. BU Computer Engineering \'25.',
+  keywords: ['Forward Deployed Engineer', 'Galatiq', 'AI Engineer', 'Fortune 500 AI', 'Machine Learning', 'LangGraph', 'Multi-Agent Systems', 'RAG', 'Full-Stack', 'Boston University', 'Computer Engineering'],
   authors: [{ name: 'Zhilang (Lang) Gui' }],
   openGraph: {
-    title: 'Lang Gui | AI Engineer',
-    description: 'AI Engineer shipping multi-agent systems and production RAG pipelines. 10 apps in 10 weeks. AWS hackathon winner.',
+    title: 'Lang Gui | FDE at Galatiq',
+    description: 'Forward Deployed Engineer at Galatiq building AI solutions for Fortune 500 teams.',
     url: 'https://www.buildwithlang.com',
     siteName: 'Build with Lang',
     locale: 'en_US',
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Lang Gui | AI Engineer',
-    description: 'AI Engineer shipping multi-agent systems and production RAG pipelines. 10 apps in 10 weeks. AWS hackathon winner.',
+    title: 'Lang Gui | FDE at Galatiq',
+    description: 'Forward Deployed Engineer at Galatiq building AI solutions for Fortune 500 teams.',
     creator: '@lgui30',
   },
   robots: {

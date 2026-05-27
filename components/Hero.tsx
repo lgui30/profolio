@@ -26,7 +26,16 @@ const Hero = () => {
         {/* Bio */}
         <div className="max-w-4xl space-y-4">
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
-            I&apos;m Lang, a Forward Deployed Engineer at <span className="font-bold text-black dark:text-white underline decoration-2 decoration-[#FFB74D]">Galatiq</span>. I ship AI-powered products from <span className="font-bold text-black dark:text-white underline decoration-2 decoration-[#FFB74D]">0&rarr;1</span> &mdash; <span className="font-bold text-black dark:text-white">10 apps in 10 weeks</span>, from a winning AWS hackathon automated red-teaming platform to voice-to-PR agents.
+            I&apos;m Lang, a Forward Deployed Engineer at{' '}
+            <a
+              href="https://galatiq.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-black underline decoration-2 decoration-[#FFB74D] hover:text-gray-600 dark:text-white dark:hover:text-gray-300"
+            >
+              Galatiq
+            </a>
+            , building AI solutions for Fortune 500 teams. I ship AI-powered products from <span className="font-bold text-black dark:text-white underline decoration-2 decoration-[#FFB74D]">0&rarr;1</span> &mdash; <span className="font-bold text-black dark:text-white">10 apps in 10 weeks</span>, from a winning AWS hackathon automated red-teaming platform to voice-to-PR agents.
           </p>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
             BU Computer Engineering &apos;25, Technology Innovation concentration. Ex-<span className="font-bold text-black dark:text-white underline decoration-2 decoration-[#FFB74D]">Cadence Design Systems</span>.

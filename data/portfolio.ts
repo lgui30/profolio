@@ -6,8 +6,11 @@ export const experiences: Experience[] = [
     role: 'Forward Deployed Engineer',
     location: 'Austin, TX',
     period: 'April 2026 - Present',
+    url: 'https://galatiq.ai/',
     image: '/images/galatiq.png',
-    achievements: [],
+    achievements: [
+      'Building AI solutions for Fortune 500 teams',
+    ],
   },
   {
     company: 'EasyBee AI',
