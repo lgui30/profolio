@@ -186,6 +186,7 @@ export const projects: Project[] = [
     tags: ['Next.js 14', 'TypeScript', 'SQLite', 'Drizzle', 'Leaflet', 'Data Viz', 'Tailwind'],
     categories: ['🚀 Top Picks', 'AI/ML', 'Web Apps'],
     github: 'https://github.com/lgui30/graduationTrend',
+    url: 'https://graduation-trend-glk4gankc-langs-projects-f4b64e04.vercel.app',
     image: '/images/graduation-trend-home.png',
     images: [
       '/images/graduation-trend-home.png',
